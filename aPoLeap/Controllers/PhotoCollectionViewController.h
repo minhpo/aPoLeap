@@ -11,6 +11,9 @@
 #import "PhotoViewDelegate.h"
 #import "PhotoViewDataSource.h"
 
-@interface PhotoCollectionViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, PhotoViewCellDelegate, PhotoViewDelegate, PhotoViewDataSource>
+@interface PhotoCollectionViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, PhotoViewCellDelegate, PhotoViewDelegate, PhotoViewDataSource> {
+    @protected
+    NSArray *_pictures;
+}
 
 @end

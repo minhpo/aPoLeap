@@ -19,8 +19,6 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     UIView *_snapShot;
     
     BOOL _didEndPinch;
-    
-    NSArray *_pictures;
 }
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
@@ -246,15 +244,47 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 }
 
 #pragma mark - PhotoViewDataSource
-// TODO: Should be implemented
+
 - (NSIndexPath*)photoViewController:(PhotoViewController*)photoViewController getNextIndexPathForCurrentIndexPath:(NSIndexPath*)indexPath {
-    NSAssert(NO, @"%s not yet implemented", __FUNCTION__);
-    return nil;
+    NSInteger row = 0;
+    NSInteger section = 0;
+    
+    // Return nil if current index path reached max boundary
+    if (indexPath.section == [self numberOfSectionsInCollectionView:self.collectionView] - 1
+        && indexPath.row == [self collectionView:self.collectionView numberOfItemsInSection:indexPath.section] - 1)
+        return nil;
+    
+    // If reaching section overflow, then increment section and set row index to 0
+    if (indexPath.row == [self collectionView:self.collectionView numberOfItemsInSection:indexPath.section] - 1)
+        section = indexPath.section + 1;
+    // Increment row index and set section index to current index
+    else if (indexPath.section <= [self numberOfSectionsInCollectionView:self.collectionView] - 1) {
+        row = indexPath.row + 1;
+        section = indexPath.section;
+    }
+    
+    return [NSIndexPath indexPathForRow:row inSection:section];
 }
-// TODO: Should be implemented
+
 - (NSIndexPath*)photoViewController:(PhotoViewController*)photoViewController getPreviousIndexPathForCurrentIndexPath:(NSIndexPath*)indexPath {
-    NSAssert(NO, @"%s not yet implemented", __FUNCTION__);
-    return nil;
+    NSInteger row = 0;
+    NSInteger section = 0;
+    
+    // Return nil if current index path reached max boundary
+    if (indexPath.section == 0
+        && indexPath.row == 0)
+        return nil;
+    
+    // If reaching section overflow, then decrease section and set row index to max row index
+    if (indexPath.row == 0) {
+        section = indexPath.section - 1;
+        row = [self collectionView:self.collectionView numberOfItemsInSection:section] - 1;
+    }
+    // Decrease row index and set section index to current index
+    else if (indexPath.section >= 0)
+        row = indexPath.row - 1;
+    
+    return [NSIndexPath indexPathForRow:row inSection:section];
 }
 // TODO: Should be implemented
 - (UIImage*)photoViewController:(PhotoViewController*)photoViewController getImageForIndexPath:(NSIndexPath*)indexPath {
