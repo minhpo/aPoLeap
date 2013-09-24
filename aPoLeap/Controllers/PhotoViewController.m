@@ -10,9 +10,13 @@
 #import "PhotoViewDelegate.h"
 
 @interface PhotoViewController () {
-    UIPanGestureRecognizer *_panGestureRecognizer;
+    UIPanGestureRecognizer *_oneFingerPanGestureRecognizer;
+    UIPanGestureRecognizer *_twoFingerPanGestureRecognizer;
     UIPinchGestureRecognizer *_pinchGestureRecognizer;
+    
+    UIView *_snapShot;
 }
+
 @end
 
 @implementation PhotoViewController
@@ -25,11 +29,16 @@
     _pinchGestureRecognizer.delegate = self;
     [self.view addGestureRecognizer:_pinchGestureRecognizer];
     
-    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
-    [_panGestureRecognizer setMinimumNumberOfTouches:2];
-    [_panGestureRecognizer setDelaysTouchesBegan:YES];
-    _panGestureRecognizer.delegate = self;
-    [self.view addGestureRecognizer:_panGestureRecognizer];
+    _twoFingerPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(twoFingerPanGestureRecognized:)];
+    [_twoFingerPanGestureRecognizer setMinimumNumberOfTouches:2];
+    [_twoFingerPanGestureRecognizer setDelaysTouchesBegan:YES];
+    _twoFingerPanGestureRecognizer.delegate = self;
+    [self.view addGestureRecognizer:_twoFingerPanGestureRecognizer];
+    
+    _oneFingerPanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oneFingerPanGestureRecognized:)];
+    [_oneFingerPanGestureRecognizer setMaximumNumberOfTouches:1];
+    [_oneFingerPanGestureRecognizer setDelaysTouchesBegan:YES];
+    [self.view addGestureRecognizer:_oneFingerPanGestureRecognizer];
 }
 
 #pragma mark - Private methods
@@ -49,9 +58,41 @@
     }
 }
 
-- (void)panGestureRecognized:(UIPanGestureRecognizer*)sender {
+- (void)twoFingerPanGestureRecognized:(UIPanGestureRecognizer*)sender {
     if ([self.photoViewDelegate respondsToSelector:@selector(photoViewController:didPinchToPosition:)])
         [self.photoViewDelegate photoViewController:self didPinchToPosition:[sender translationInView:self.view.superview]];
+}
+
+- (void)oneFingerPanGestureRecognized:(UIPanGestureRecognizer*)sender {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        _snapShot = [self.imageView snapshotViewAfterScreenUpdates:NO];
+        _snapShot.frame = self.imageView.frame;
+        
+        [self.view addSubview:_snapShot];
+        self.imageView.alpha = 0;
+    }
+    else if (sender.state == UIGestureRecognizerStateChanged) {
+        if (_snapShot) {
+            CGPoint translation = [sender translationInView:self.view];
+            
+            CGPoint center = self.imageView.center;
+            center.x += translation.x;
+            
+            _snapShot.center = center;
+        }
+        
+    }
+    else if (sender.state == UIGestureRecognizerStateEnded) {
+        [UIView animateWithDuration:0.3
+                         animations:^(){
+                             _snapShot.frame = self.imageView.frame;
+                         }
+                         completion:^(BOOL finished){
+                             [_snapShot removeFromSuperview];
+                             
+                             self.imageView.alpha = 1;
+                         }];
+    }
 }
 
 #pragma mark - UIGestureRecognizerDelegate

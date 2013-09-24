@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @protocol PhotoViewDelegate;
+@protocol PhotoViewDataSource;
 
 @interface PhotoViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 @property (nonatomic, weak) id<PhotoViewDelegate>photoViewDelegate;
+@property (nonatomic, weak) id<PhotoViewDataSource>photoViewDataSource;
 
 @end

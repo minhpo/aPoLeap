@@ -19,6 +19,8 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     UIView *_snapShot;
     
     BOOL _didEndPinch;
+    
+    NSArray *_pictures;
 }
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
@@ -30,10 +32,13 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+	// Fill array with content
+    _pictures = @[@"01.jpg", @"02.jpg", @"03.jpg"];
     
+    // Register xib for collection view
     [self.collectionView registerNib:[UINib nibWithNibName:@"PhotoViewCell" bundle:nil] forCellWithReuseIdentifier:photoViewCellIdentifier];
     
+    // Set layout properties for the collection view
     self.flowLayout.itemSize = CGSizeMake(100.0, 100.0);
     self.flowLayout.minimumInteritemSpacing = 10;
 }
@@ -47,11 +52,11 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 3;
+    return _pictures.count;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 20;
+    return _pictures.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -59,7 +64,7 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     if (!cell.photoViewCellDelegate)
         cell.photoViewCellDelegate = self;
     
-    [cell setImage:[UIImage imageNamed:@"test.jpg"]];
+    [cell setImage:[UIImage imageNamed:_pictures[indexPath.row]]];
     
     return cell;
 }
@@ -181,6 +186,7 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 
 - (void)photoViewController:(PhotoViewController*)photoViewController didChangePinchWithScale:(CGFloat)scale {
     if (_snapShot) {
+        // Adjust the size depending on the scale
         CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
         _snapShot.transform = transform;
     }
@@ -239,12 +245,27 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     }
 }
 
+#pragma mark - PhotoViewDataSource
+// TODO: Should be implemented
+- (NSIndexPath*)photoViewController:(PhotoViewController*)photoViewController getNextIndexPathForCurrentIndexPath:(NSIndexPath*)indexPath {
+    NSAssert(NO, @"%s not yet implemented", __FUNCTION__);
+    return nil;
+}
+// TODO: Should be implemented
+- (NSIndexPath*)photoViewController:(PhotoViewController*)photoViewController getPreviousIndexPathForCurrentIndexPath:(NSIndexPath*)indexPath {
+    NSAssert(NO, @"%s not yet implemented", __FUNCTION__);
+    return nil;
+}
+// TODO: Should be implemented
+- (UIImage*)photoViewController:(PhotoViewController*)photoViewController getImageForIndexPath:(NSIndexPath*)indexPath {
+    NSAssert(NO, @"%s not yet implemented", __FUNCTION__);
+    return nil;
+}
+
 #pragma mark - Prive methods
 
 - (CGRect)getAspectFillRectForTargetRect:(CGRect)targetRect inRefenceRect:(CGRect)referenceRect {
-    CGFloat scale = targetRect.size.width > targetRect.size.height
-                    ? referenceRect.size.height / targetRect.size.height
-                    : referenceRect.size.width / targetRect.size.width;
+    CGFloat scale = referenceRect.size.height / fminf(targetRect.size.width, targetRect.size.height);
     
     CGRect aspectFillRect = targetRect;
     aspectFillRect.size.width *= scale;

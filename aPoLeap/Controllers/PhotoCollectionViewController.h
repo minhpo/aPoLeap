@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "PhotoViewCellDelegate.h"
 #import "PhotoViewDelegate.h"
+#import "PhotoViewDataSource.h"
 
-@interface PhotoCollectionViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, PhotoViewCellDelegate, PhotoViewDelegate>
+@interface PhotoCollectionViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, PhotoViewCellDelegate, PhotoViewDelegate, PhotoViewDataSource>
 
 @end

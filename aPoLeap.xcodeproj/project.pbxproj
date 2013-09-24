@@ -21,8 +21,6 @@
 		226F032317F0D52500DD7194 /* aPoLeapTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F032217F0D52500DD7194 /* aPoLeapTests.m */; };
 		226F032E17F0D6C700DD7194 /* PhotoCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 226F032D17F0D6C700DD7194 /* PhotoCollectionView.xib */; };
 		226F033417F0D6ED00DD7194 /* PhotoCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 226F032D17F0D6C700DD7194 /* PhotoCollectionView.xib */; };
-		226F033817F0D81C00DD7194 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 226F033717F0D81C00DD7194 /* test.jpg */; };
-		226F033917F0D81C00DD7194 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 226F033717F0D81C00DD7194 /* test.jpg */; };
 		226F033C17F0D83800DD7194 /* PhotoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F033B17F0D83800DD7194 /* PhotoCollectionViewController.m */; };
 		226F033D17F0D83800DD7194 /* PhotoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F033B17F0D83800DD7194 /* PhotoCollectionViewController.m */; };
 		226F033F17F0DA7000DD7194 /* PhotoViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 226F033E17F0DA7000DD7194 /* PhotoViewCell.xib */; };
@@ -33,6 +31,9 @@
 		228264B817F1053400A8B629 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 228264B617F1053400A8B629 /* PhotoViewController.m */; };
 		228264BA17F1055100A8B629 /* PhotoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 228264B917F1055100A8B629 /* PhotoView.xib */; };
 		228264BB17F1055100A8B629 /* PhotoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 228264B917F1055100A8B629 /* PhotoView.xib */; };
+		22A014ED17F163B8008BE2BD /* 01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 22A014EA17F163B8008BE2BD /* 01.jpg */; };
+		22A014EE17F163B8008BE2BD /* 02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 22A014EB17F163B8008BE2BD /* 02.jpg */; };
+		22A014EF17F163B8008BE2BD /* 03.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 22A014EC17F163B8008BE2BD /* 03.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +64,6 @@
 		226F032017F0D52500DD7194 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		226F032217F0D52500DD7194 /* aPoLeapTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aPoLeapTests.m; sourceTree = "<group>"; };
 		226F032D17F0D6C700DD7194 /* PhotoCollectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoCollectionView.xib; path = Views/PhotoCollectionView.xib; sourceTree = "<group>"; };
-		226F033717F0D81C00DD7194 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
 		226F033A17F0D83800DD7194 /* PhotoCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoCollectionViewController.h; path = Controllers/PhotoCollectionViewController.h; sourceTree = "<group>"; };
 		226F033B17F0D83800DD7194 /* PhotoCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoCollectionViewController.m; path = Controllers/PhotoCollectionViewController.m; sourceTree = "<group>"; };
 		226F033E17F0DA7000DD7194 /* PhotoViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoViewCell.xib; path = Views/PhotoViewCell.xib; sourceTree = "<group>"; };
@@ -74,6 +74,10 @@
 		228264B617F1053400A8B629 /* PhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoViewController.m; path = Controllers/PhotoViewController.m; sourceTree = "<group>"; };
 		228264B917F1055100A8B629 /* PhotoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoView.xib; path = Views/PhotoView.xib; sourceTree = "<group>"; };
 		228264BC17F1094C00A8B629 /* PhotoViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoViewDelegate.h; path = Protocols/PhotoViewDelegate.h; sourceTree = "<group>"; };
+		22A014EA17F163B8008BE2BD /* 01.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 01.jpg; sourceTree = "<group>"; };
+		22A014EB17F163B8008BE2BD /* 02.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 02.jpg; sourceTree = "<group>"; };
+		22A014EC17F163B8008BE2BD /* 03.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 03.jpg; sourceTree = "<group>"; };
+		22A014F017F1642D008BE2BD /* PhotoViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoViewDataSource.h; path = Protocols/PhotoViewDataSource.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,7 +212,9 @@
 		226F033617F0D81C00DD7194 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				226F033717F0D81C00DD7194 /* test.jpg */,
+				22A014EA17F163B8008BE2BD /* 01.jpg */,
+				22A014EB17F163B8008BE2BD /* 02.jpg */,
+				22A014EC17F163B8008BE2BD /* 03.jpg */,
 			);
 			name = Images;
 			path = Resources/Images;
@@ -219,6 +225,7 @@
 			children = (
 				228264B417F0E97000A8B629 /* PhotoViewCellDelegate.h */,
 				228264BC17F1094C00A8B629 /* PhotoViewDelegate.h */,
+				22A014F017F1642D008BE2BD /* PhotoViewDataSource.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -299,11 +306,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22A014EF17F163B8008BE2BD /* 03.jpg in Resources */,
 				226F031017F0D52400DD7194 /* Images.xcassets in Resources */,
 				226F032E17F0D6C700DD7194 /* PhotoCollectionView.xib in Resources */,
+				22A014ED17F163B8008BE2BD /* 01.jpg in Resources */,
+				22A014EE17F163B8008BE2BD /* 02.jpg in Resources */,
 				226F033F17F0DA7000DD7194 /* PhotoViewCell.xib in Resources */,
 				226F030217F0D52400DD7194 /* InfoPlist.strings in Resources */,
-				226F033817F0D81C00DD7194 /* test.jpg in Resources */,
 				228264BA17F1055100A8B629 /* PhotoView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,7 +322,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				226F032117F0D52500DD7194 /* InfoPlist.strings in Resources */,
-				226F033917F0D81C00DD7194 /* test.jpg in Resources */,
 				228264BB17F1055100A8B629 /* PhotoView.xib in Resources */,
 				226F033417F0D6ED00DD7194 /* PhotoCollectionView.xib in Resources */,
 				226F034017F0DA7000DD7194 /* PhotoViewCell.xib in Resources */,
