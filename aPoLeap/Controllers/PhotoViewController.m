@@ -15,10 +15,18 @@
     UIPanGestureRecognizer *_twoFingerPanGestureRecognizer;
     UIPinchGestureRecognizer *_pinchGestureRecognizer;
     
-    UIView *_snapShot;
+    NSIndexPath *_centerIndexPath;
+    
+    UIView *_leftSnapShot;
+    UIView *_centerSnapShot;
+    UIView *_rightSnapShot;
+    
+    CGPoint _startingPoint;
 }
 
-@property (nonatomic, strong) IBOutlet UIImageView *imageView;
+@property (nonatomic, strong) IBOutlet UIImageView *leftImageView;
+@property (nonatomic, strong) IBOutlet UIImageView *centerImageView;
+@property (nonatomic, strong) IBOutlet UIImageView *rightImageView;
 
 @end
 
@@ -47,12 +55,46 @@
 #pragma mark - Public methods
 
 - (UIImageView*)getImageView {
-    return self.imageView;
+    return self.centerImageView;
 }
 
 - (void)setContentForIndexPath:(NSIndexPath*)indexPath {
+    // Keep reference to index path
+    _centerIndexPath = indexPath;
+    NSLog(@"%s %@", __FUNCTION__, [_centerIndexPath description]);
+    // Notify delegate of current index
+    if ([self.photoViewDelegate respondsToSelector:@selector(photoViewController:didScrollToIndexPath:)])
+        [self.photoViewDelegate photoViewController:self didScrollToIndexPath:_centerIndexPath];
+    
+    // Set center image
     if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getImageForIndexPath:)])
-        self.imageView.image = [self.photoViewDataSource photoViewController:self getImageForIndexPath:indexPath];
+        self.centerImageView.image = [self.photoViewDataSource photoViewController:self getImageForIndexPath:indexPath];
+    
+    // Set left image
+    if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getPreviousIndexPathForCurrentIndexPath:)]
+        && [self.photoViewDataSource respondsToSelector:@selector(photoViewController:getImageForIndexPath:)]) {
+        NSIndexPath *previousIndexPath = [self.photoViewDataSource photoViewController:self getPreviousIndexPathForCurrentIndexPath:indexPath];
+        if (previousIndexPath) {
+            UIImage *leftImage = [self.photoViewDataSource photoViewController:self getImageForIndexPath:previousIndexPath];
+            self.leftImageView.image = leftImage;
+            self.leftImageView.hidden = NO;
+        }
+        else
+            self.leftImageView.hidden = YES;
+    }
+    
+    // Set right image
+    if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getNextIndexPathForCurrentIndexPath:)]
+        && [self.photoViewDataSource respondsToSelector:@selector(photoViewController:getImageForIndexPath:)]) {
+        NSIndexPath *nextIndexPath = [self.photoViewDataSource photoViewController:self getNextIndexPathForCurrentIndexPath:indexPath];
+        if (nextIndexPath) {
+            UIImage *rightImage = [self.photoViewDataSource photoViewController:self getImageForIndexPath:nextIndexPath];
+            self.rightImageView.image = rightImage;
+            self.rightImageView.hidden = NO;
+        }
+        else
+            self.rightImageView.hidden = YES;
+    }
 }
 
 #pragma mark - Private methods
@@ -79,33 +121,107 @@
 
 - (void)oneFingerPanGestureRecognized:(UIPanGestureRecognizer*)sender {
     if (sender.state == UIGestureRecognizerStateBegan) {
-        _snapShot = [self.imageView snapshotViewAfterScreenUpdates:NO];
-        _snapShot.frame = self.imageView.frame;
+        // Create snapshots for translations
+        _leftSnapShot = [self.leftImageView snapshotViewAfterScreenUpdates:NO];
+        _leftSnapShot.frame = self.leftImageView.frame;
+        [self.view addSubview:_leftSnapShot];
+        self.leftImageView.alpha = 0;
         
-        [self.view addSubview:_snapShot];
-        self.imageView.alpha = 0;
+        _centerSnapShot = [self.centerImageView snapshotViewAfterScreenUpdates:NO];
+        _centerSnapShot.frame = self.centerImageView.frame;
+        [self.view addSubview:_centerSnapShot];
+        self.centerImageView.alpha = 0;
+        
+        _rightSnapShot = [self.rightImageView snapshotViewAfterScreenUpdates:NO];
+        _rightSnapShot.frame = self.rightImageView.frame;
+        [self.view addSubview:_rightSnapShot];
+        self.rightImageView.alpha = 0;
     }
     else if (sender.state == UIGestureRecognizerStateChanged) {
-        if (_snapShot) {
-            CGPoint translation = [sender translationInView:self.view];
-            
-            CGPoint center = self.imageView.center;
-            center.x += translation.x;
-            
-            _snapShot.center = center;
-        }
+        // Update the positions during pan
+        CGPoint translation = [sender translationInView:self.view];
         
+        CGPoint leftCenter = self.leftImageView.center;
+        leftCenter.x += translation.x;
+        _leftSnapShot.center = leftCenter;
+        
+        CGPoint center = self.centerImageView.center;
+        center.x += translation.x;
+        _centerSnapShot.center = center;
+        
+        CGPoint rightCenter = self.rightImageView.center;
+        rightCenter.x += translation.x;
+        _rightSnapShot.center = rightCenter;
     }
     else if (sender.state == UIGestureRecognizerStateEnded) {
-        [UIView animateWithDuration:0.3
-                         animations:^(){
-                             _snapShot.frame = self.imageView.frame;
-                         }
-                         completion:^(BOOL finished){
-                             [_snapShot removeFromSuperview];
-                             
-                             self.imageView.alpha = 1;
-                         }];
+        CGPoint translation = [sender translationInView:self.view];
+        
+        float xTranslation = fabsf(translation.x);
+        // Return to initial state if translation threshold is not exceeded or there is not content on the left/right side
+        if (xTranslation < self.view.frame.size.width / 2
+            || self.leftImageView.hidden
+            || self.rightImageView.hidden) {
+            [UIView animateWithDuration:0.3
+                             animations:^(){
+                                 _leftSnapShot.frame = self.leftImageView.frame;
+                                 _centerSnapShot.frame = self.centerImageView.frame;
+                                 _rightSnapShot.frame = self.rightImageView.frame;
+                             }
+                             completion:^(BOOL finished){
+                                 [_leftSnapShot removeFromSuperview];
+                                 [_centerSnapShot removeFromSuperview];
+                                 [_rightSnapShot removeFromSuperview];
+                                 
+                                 self.leftImageView.alpha = 1;
+                                 self.centerImageView.alpha = 1;
+                                 self.rightImageView.alpha = 1;
+                             }];
+        }
+        // Left translation, should get next image after completion
+        else if (translation.x < 0) {
+            // No content on the right side, should return to normal position
+            [UIView animateWithDuration:0.3
+                             animations:^(){
+                                 _centerSnapShot.frame = self.leftImageView.frame;
+                                 _rightSnapShot.frame = self.centerImageView.frame;
+                             }
+                             completion:^(BOOL finished){
+                                 [_leftSnapShot removeFromSuperview];
+                                 [_centerSnapShot removeFromSuperview];
+                                 [_rightSnapShot removeFromSuperview];
+                                 
+                                 self.leftImageView.alpha = 1;
+                                 self.centerImageView.alpha = 1;
+                                 self.rightImageView.alpha = 1;
+                                 
+                                 if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getNextIndexPathForCurrentIndexPath:)]) {
+                                     NSIndexPath *nextIndexPath = [self.photoViewDataSource photoViewController:self getNextIndexPathForCurrentIndexPath:_centerIndexPath];
+                                     [self setContentForIndexPath:nextIndexPath];
+                                 }
+                             }];
+        }
+        // Right translation, should get previous image after completion
+        else {
+            [UIView animateWithDuration:0.3
+                             animations:^(){
+                                 _leftSnapShot.frame = self.centerImageView.frame;
+                                 _centerSnapShot.frame = self.rightImageView.frame;
+                             }
+                             completion:^(BOOL finished){
+                                 [_leftSnapShot removeFromSuperview];
+                                 [_centerSnapShot removeFromSuperview];
+                                 [_rightSnapShot removeFromSuperview];
+                                 
+                                 self.leftImageView.alpha = 1;
+                                 self.centerImageView.alpha = 1;
+                                 self.rightImageView.alpha = 1;
+                                 
+                                 if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getPreviousIndexPathForCurrentIndexPath:)]) {
+                                     NSIndexPath *previousIndexPath = [self.photoViewDataSource photoViewController:self getPreviousIndexPathForCurrentIndexPath:_centerIndexPath];
+                                     [self setContentForIndexPath:previousIndexPath];
+                                 }
+                             }];
+        }
     }
 }
 

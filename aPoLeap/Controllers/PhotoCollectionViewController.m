@@ -15,7 +15,7 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 @interface PhotoCollectionViewController () {
     PhotoViewController *_photoViewController;
     
-    __weak PhotoViewCell *_currentSelectedCell;
+    PhotoViewCell *_currentSelectedCell;
     UIView *_snapShot;
     
     BOOL _didEndPinch;
@@ -250,7 +250,16 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 }
 
 - (void)photoViewController:(PhotoViewController*)photoViewController didScrollToIndexPath:(NSIndexPath*)indexPath {
+    NSLog(@"%s %@", __FUNCTION__, [indexPath description]);
+    // Show old cell
+    _currentSelectedCell.alpha = 1;
+    
+    // Set new reference
     _currentSelectedCell = (PhotoViewCell*)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+    
+    // Hide the new cell
+    _currentSelectedCell.alpha = 0;
+    [_currentSelectedCell setNeedsLayout];
 }
 
 #pragma mark - PhotoViewDataSource
@@ -291,8 +300,10 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
         row = [self collectionView:self.collectionView numberOfItemsInSection:section] - 1;
     }
     // Decrease row index and set section index to current index
-    else if (indexPath.section >= 0)
+    else if (indexPath.section >= 0) {
+        section = indexPath.section;
         row = indexPath.row - 1;
+    }
     
     return [NSIndexPath indexPathForRow:row inSection:section];
 }

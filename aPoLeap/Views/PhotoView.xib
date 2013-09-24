@@ -6,7 +6,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PhotoViewController">
             <connections>
-                <outlet property="imageView" destination="eT3-Sn-G9f" id="b6X-AK-60U"/>
+                <outlet property="centerImageView" destination="eT3-Sn-G9f" id="jYH-iu-u3z"/>
+                <outlet property="leftImageView" destination="MDt-rQ-SWi" id="HKp-o3-TpJ"/>
+                <outlet property="rightImageView" destination="KlS-TT-PNb" id="tM2-Gv-rm6"/>
                 <outlet property="view" destination="1" id="OqM-15-4WT"/>
             </connections>
         </placeholder>
@@ -15,8 +17,18 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="eT3-Sn-G9f">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="MDt-rQ-SWi" userLabel="Left Image View">
+                    <rect key="frame" x="-320" y="0.0" width="320" height="480"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="eT3-Sn-G9f" userLabel="Center Image View">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="KlS-TT-PNb" userLabel="Right Image View">
+                    <rect key="frame" x="320" y="0.0" width="320" height="480"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </imageView>
