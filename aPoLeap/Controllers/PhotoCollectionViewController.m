@@ -250,7 +250,6 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 }
 
 - (void)photoViewController:(PhotoViewController*)photoViewController didScrollToIndexPath:(NSIndexPath*)indexPath {
-    NSLog(@"%s %@", __FUNCTION__, [indexPath description]);
     // Show old cell
     _currentSelectedCell.alpha = 1;
     

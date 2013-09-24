@@ -61,7 +61,7 @@
 - (void)setContentForIndexPath:(NSIndexPath*)indexPath {
     // Keep reference to index path
     _centerIndexPath = indexPath;
-    NSLog(@"%s %@", __FUNCTION__, [_centerIndexPath description]);
+
     // Notify delegate of current index
     if ([self.photoViewDelegate respondsToSelector:@selector(photoViewController:didScrollToIndexPath:)])
         [self.photoViewDelegate photoViewController:self didScrollToIndexPath:_centerIndexPath];
@@ -159,8 +159,8 @@
         float xTranslation = fabsf(translation.x);
         // Return to initial state if translation threshold is not exceeded or there is not content on the left/right side
         if (xTranslation < self.view.frame.size.width / 2
-            || self.leftImageView.hidden
-            || self.rightImageView.hidden) {
+            || (self.leftImageView.hidden && translation.x > 0)
+            || (self.rightImageView.hidden && translation.x < 0)) {
             [UIView animateWithDuration:0.3
                              animations:^(){
                                  _leftSnapShot.frame = self.leftImageView.frame;
