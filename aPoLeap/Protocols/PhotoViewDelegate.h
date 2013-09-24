@@ -18,4 +18,6 @@
 
 - (void)photoViewController:(PhotoViewController*)photoViewController didPinchToPosition:(CGPoint)position;
 
+- (void)photoViewController:(PhotoViewController*)photoViewController didScrollToIndexPath:(NSIndexPath*)indexPath;
+
 @end

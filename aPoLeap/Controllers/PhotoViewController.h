@@ -13,8 +13,10 @@
 
 @interface PhotoViewController : UIViewController <UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) IBOutlet UIImageView *imageView;
 @property (nonatomic, weak) id<PhotoViewDelegate>photoViewDelegate;
 @property (nonatomic, weak) id<PhotoViewDataSource>photoViewDataSource;
+
+- (UIImageView*)getImageView;
+- (void)setContentForIndexPath:(NSIndexPath*)indexPath;
 
 @end

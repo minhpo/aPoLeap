@@ -125,19 +125,25 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     // If scale threshold is reached or exceeded, display image in full screen mode
     else {
         // Create the full screen view controller
+        if (_photoViewController) {
+            [_photoViewController.view removeFromSuperview];
+        }
+        
         _photoViewController = [[PhotoViewController alloc] initWithNibName:@"PhotoView" bundle:nil];
         
         // Add it to the root view hierarchy
         [self.view addSubview:_photoViewController.view];
         
-        // Set delegate to self to react to events
+        // Set delegate and datasource to self to react to events
         _photoViewController.photoViewDelegate = self;
+        _photoViewController.photoViewDataSource = self;
         
         // Set initial position and size to the snapshot
         _photoViewController.view.frame = _snapShot.frame;
         
         // Set image content from the current selected cell
-        _photoViewController.imageView.image = _currentSelectedCell.image;
+        NSIndexPath *currentIndexPath = [self.collectionView indexPathForCell:_currentSelectedCell];
+        [_photoViewController setContentForIndexPath:currentIndexPath];
         
         // Remove the old snapshot
         [_snapShot removeFromSuperview];
@@ -171,11 +177,11 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 - (void)photoViewController:(PhotoViewController*)photoViewController didBeginPinchWithScale:(CGFloat)scale {
     self.collectionView.scrollEnabled = NO;
     
-    _snapShot = [_photoViewController.imageView snapshotViewAfterScreenUpdates:NO];
-    _snapShot.frame = [self.view convertRect:_photoViewController.imageView.frame fromView:_photoViewController.view];
+    _snapShot = [[_photoViewController getImageView] snapshotViewAfterScreenUpdates:NO];
+    _snapShot.frame = [self.view convertRect:[_photoViewController getImageView].frame fromView:_photoViewController.view];
     [self.view addSubview:_snapShot];
     
-    _photoViewController.imageView.hidden = YES;
+    [_photoViewController getImageView].hidden = YES;
     [UIView animateWithDuration:0.3
                      animations:^(){
                          _photoViewController.view.alpha = 0;
@@ -217,13 +223,13 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     else {
         [UIView animateWithDuration:0.3
                          animations:^(){
-                             _snapShot.frame = [self.view convertRect:_photoViewController.imageView.frame fromView:_photoViewController.view];
+                             _snapShot.frame = [self.view convertRect:[_photoViewController getImageView].frame fromView:_photoViewController.view];
                              _photoViewController.view.alpha = 1;
                          }
                          completion:^(BOOL finished){
                              [_snapShot removeFromSuperview];
                              
-                             _photoViewController.imageView.hidden = NO;
+                             [_photoViewController getImageView].hidden = NO;
                              
                              self.collectionView.scrollEnabled = YES;
                              _didEndPinch = NO;
@@ -235,12 +241,16 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     if(_snapShot
        && !_didEndPinch) {
         // Adjust the position of the snapshot
-        CGPoint convertedPoint = [self.view convertPoint:_photoViewController.imageView.center fromView:_photoViewController.view];
+        CGPoint convertedPoint = [self.view convertPoint:[_photoViewController getImageView].center fromView:_photoViewController.view];
         convertedPoint.x += position.x;
         convertedPoint.y += position.y;
         
         _snapShot.center = convertedPoint;
     }
+}
+
+- (void)photoViewController:(PhotoViewController*)photoViewController didScrollToIndexPath:(NSIndexPath*)indexPath {
+    _currentSelectedCell = (PhotoViewCell*)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
 }
 
 #pragma mark - PhotoViewDataSource
@@ -286,10 +296,11 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     
     return [NSIndexPath indexPathForRow:row inSection:section];
 }
-// TODO: Should be implemented
+
 - (UIImage*)photoViewController:(PhotoViewController*)photoViewController getImageForIndexPath:(NSIndexPath*)indexPath {
-    NSAssert(NO, @"%s not yet implemented", __FUNCTION__);
-    return nil;
+    PhotoViewCell *cell = (PhotoViewCell*)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+    
+    return [cell image];
 }
 
 #pragma mark - Prive methods

@@ -8,6 +8,7 @@
 
 #import "PhotoViewController.h"
 #import "PhotoViewDelegate.h"
+#import "PhotoViewDataSource.h"
 
 @interface PhotoViewController () {
     UIPanGestureRecognizer *_oneFingerPanGestureRecognizer;
@@ -16,6 +17,8 @@
     
     UIView *_snapShot;
 }
+
+@property (nonatomic, strong) IBOutlet UIImageView *imageView;
 
 @end
 
@@ -39,6 +42,17 @@
     [_oneFingerPanGestureRecognizer setMaximumNumberOfTouches:1];
     [_oneFingerPanGestureRecognizer setDelaysTouchesBegan:YES];
     [self.view addGestureRecognizer:_oneFingerPanGestureRecognizer];
+}
+
+#pragma mark - Public methods
+
+- (UIImageView*)getImageView {
+    return self.imageView;
+}
+
+- (void)setContentForIndexPath:(NSIndexPath*)indexPath {
+    if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getImageForIndexPath:)])
+        self.imageView.image = [self.photoViewDataSource photoViewController:self getImageForIndexPath:indexPath];
 }
 
 #pragma mark - Private methods
