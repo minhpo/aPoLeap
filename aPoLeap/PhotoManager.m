@@ -22,9 +22,6 @@ typedef enum {
 } PhotoManagerState;
 
 @interface PhotoManager () {
-    NSString *_listOfPhotosUrlTemplate;
-    NSString *_photoUrlTemplate;
-    
     TMCStorageManager *_storageManager;
     
     PhotoManagerState _state;
@@ -34,14 +31,14 @@ typedef enum {
 
 @implementation PhotoManager
 
-- (id)initWithListOfPhotosUrlTemplate:(NSString*)listOfPhotosUrlTemplate photoUrlTemplate:(NSString*)photoUrlTemplate {
+- (id)init {
     self = [super init];
     
     if (self) {
         _state = PhotoManagerIdleState;
         
-        _listOfPhotosUrlTemplate = listOfPhotosUrlTemplate;
-        _photoUrlTemplate = photoUrlTemplate;
+        _listOfPhotosUrlTemplate = kListOfPhotosUrl;
+        _photoUrlTemplate = nil;
         
         _storageManager = [[TMCStorageManager alloc] initWithCacheExpiration:kSecondsInOneDay];
         

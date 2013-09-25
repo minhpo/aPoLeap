@@ -14,6 +14,7 @@ static const NSString* kMockListOfPhotosUrl = @"kMockListOfPhotosUrl%d";
 
 @interface MockPhotoManager : PhotoManager
 
+- (id)initWithListOfPhotosUrlTemplate:(NSString*)listOfPhotosUrlTemplate photoUrlTemplate:(NSString*)photoUrlTemplate;
 - (void)setMockRemoteCommunicator:(MockRemoteCommunicator*)mockRemoteCommunictor;
 
 @property (assign) BOOL didNotify;

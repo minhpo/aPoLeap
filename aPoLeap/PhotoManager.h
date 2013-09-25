@@ -16,9 +16,10 @@ static const NSString *kListOfPhotosUrl = @"http://api.flickr.com/services/rest/
 @interface PhotoManager : NSObject <RemoteCommunicatorDelegate> {
     @protected
     RemoteCommunicator *_remoteCommunicator;
+    NSString *_listOfPhotosUrlTemplate;
+    NSString *_photoUrlTemplate;
 }
 
-- (id)initWithListOfPhotosUrlTemplate:(NSString*)listOfPhotosUrlTemplate photoUrlTemplate:(NSString*)photoUrlTemplate;
 - (NSArray*)getListOfPhotosForPage:(NSInteger)page;
 - (void)retrieveListOfPhotosForPage:(NSInteger)page;
 

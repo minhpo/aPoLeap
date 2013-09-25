@@ -12,9 +12,12 @@
 @implementation MockPhotoManager
 
 - (id)initWithListOfPhotosUrlTemplate:(NSString*)listOfPhotosUrlTemplate photoUrlTemplate:(NSString*)photoUrlTemplate {
-    self = [super initWithListOfPhotosUrlTemplate:listOfPhotosUrlTemplate photoUrlTemplate:photoUrlTemplate];
+    self = [super init];
     
     if (self) {
+        _listOfPhotosUrlTemplate = listOfPhotosUrlTemplate;
+        _photoUrlTemplate = photoUrlTemplate;
+        
         _remoteCommunicator = nil;
     }
     
