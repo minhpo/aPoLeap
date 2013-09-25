@@ -11,8 +11,8 @@
 
 @implementation MockPhotoManager
 
-- (id)init {
-    self = [super init];
+- (id)initWithListOfPhotosUrlTemplate:(NSString*)listOfPhotosUrlTemplate photoUrlTemplate:(NSString*)photoUrlTemplate {
+    self = [super initWithListOfPhotosUrlTemplate:listOfPhotosUrlTemplate photoUrlTemplate:photoUrlTemplate];
     
     if (self) {
         _remoteCommunicator = nil;
@@ -25,12 +25,6 @@
 
 - (void)setMockRemoteCommunicator:(MockRemoteCommunicator*)mockRemoteCommunictor {
     _remoteCommunicator = mockRemoteCommunictor;
-}
-
-#pragma mark > Overwritten methods
-
-- (void)retrieveListOfPhotos {
-    [self retrieveDataFromUrl:kMockListOfPhotosUrl];
 }
 
 #pragma mark - RemoteCommunicatorDelegate

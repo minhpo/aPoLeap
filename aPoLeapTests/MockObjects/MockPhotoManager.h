@@ -8,7 +8,7 @@
 
 #import "PhotoManager.h"
 
-static const NSString* kMockListOfPhotosUrl = @"kMockListOfPhotosUrl";
+static const NSString* kMockListOfPhotosUrl = @"kMockListOfPhotosUrl%d";
 
 @class MockRemoteCommunicator;
 

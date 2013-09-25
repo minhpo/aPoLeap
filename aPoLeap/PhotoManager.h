@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RemoteCommunicatorDelegate.h"
 
-static const NSString *kListOfPhotosUrl = @"http://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=b0d9a3d095c12dedaf5c32380bc6586f&per_page=10&format=json&nojsoncallback=1";
+static const NSString *kListOfPhotosUrl = @"http://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=b0d9a3d095c12dedaf5c32380bc6586f&per_page=10&format=json&nojsoncallback=1&page=%d";
 
 @class RemoteCommunicator;
 
@@ -18,8 +18,8 @@ static const NSString *kListOfPhotosUrl = @"http://api.flickr.com/services/rest/
     RemoteCommunicator *_remoteCommunicator;
 }
 
-- (NSArray*)getListOfPhotos;
-- (void)retrieveListOfPhotos;
-- (void)retrieveDataFromUrl:(NSString*)url;
+- (id)initWithListOfPhotosUrlTemplate:(NSString*)listOfPhotosUrlTemplate photoUrlTemplate:(NSString*)photoUrlTemplate;
+- (NSArray*)getListOfPhotosForPage:(NSInteger)page;
+- (void)retrieveListOfPhotosForPage:(NSInteger)page;
 
 @end
