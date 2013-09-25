@@ -16,12 +16,12 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
                                                                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                                                            if ([self.remoteCommunicatorDelegate respondsToSelector:@selector(remoteCommunicator:didReceiveResponse:fromUrl:withError:)]) {
+                                                                                            if ([self.remoteCommunicatorDelegate respondsToSelector:@selector(remoteCommunicator:didReceiveResponse:fromUrl:forRequestCode:withError:)]) {
                                                                                                 [self.remoteCommunicatorDelegate remoteCommunicator:self didReceiveResponse:JSON fromUrl:url forRequestCode:requestCode withError:nil];
                                                                                             }
                                                                                         }
                                                                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-                                                                                            if ([self.remoteCommunicatorDelegate respondsToSelector:@selector(remoteCommunicator:didReceiveResponse:fromUrl:withError:)]) {
+                                                                                            if ([self.remoteCommunicatorDelegate respondsToSelector:@selector(remoteCommunicator:didReceiveResponse:fromUrl:forRequestCode:withError:)]) {
                                                                                                 [self.remoteCommunicatorDelegate remoteCommunicator:self didReceiveResponse:JSON fromUrl:url forRequestCode:requestCode withError:error];
                                                                                             }
                                                                                         }];

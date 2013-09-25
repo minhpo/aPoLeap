@@ -32,17 +32,19 @@
 }
 
 - (void)testPreviousNSIndexPathRetrieval {
-    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:1 inSection:1];
+    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     NSIndexPath *previousIndexPath = [_mockPhotoCollectionViewController photoViewController:nil getPreviousIndexPathForCurrentIndexPath:currentIndexPath];
     
     XCTAssertTrue(currentIndexPath.row > previousIndexPath.row, @"Expected previous index path to contain lower row value");
+    XCTAssertTrue(currentIndexPath.section == previousIndexPath.section, @"Expected the same section value");
 }
 
 - (void)testNextNSIndexPathRetrieval {
-    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:1 inSection:1];
+    NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:1 inSection:0];
     NSIndexPath *nextIndexPath = [_mockPhotoCollectionViewController photoViewController:nil getNextIndexPathForCurrentIndexPath:currentIndexPath];
     
     XCTAssertTrue(currentIndexPath.row < nextIndexPath.row, @"Expected previous index path to contain higher row value");
+    XCTAssertTrue(currentIndexPath.section == nextIndexPath.section, @"Expected the same section value");
 }
 
 - (void)testPreviousNSIndexPathRetrievalWithRowOverflow {

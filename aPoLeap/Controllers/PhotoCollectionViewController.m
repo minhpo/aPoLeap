@@ -10,7 +10,10 @@
 #import "PhotoViewController.h"
 #import "PhotoViewCell.h"
 
+#import "PhotoManager.h"
+
 static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
+static const NSInteger kMaxNumberOrRowsPerSection = 3;
 
 @interface PhotoCollectionViewController () {
     PhotoViewController *_photoViewController;
@@ -19,6 +22,8 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     UIView *_snapShot;
     
     BOOL _didEndPinch;
+    
+    PhotoManager *_photoManager;
 }
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
@@ -30,15 +35,31 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Fill array with content
-    _pictures = @[@"01.jpg", @"02.jpg", @"03.jpg"];
-    
+	
     // Register xib for collection view
     [self.collectionView registerNib:[UINib nibWithNibName:@"PhotoViewCell" bundle:nil] forCellWithReuseIdentifier:photoViewCellIdentifier];
     
     // Set layout properties for the collection view
     self.flowLayout.itemSize = CGSizeMake(100.0, 100.0);
     self.flowLayout.minimumInteritemSpacing = 10;
+    
+    // Get shared instance of PhotoManager object
+    _photoManager = [(AppDelegate*)[UIApplication sharedApplication].delegate getSharedPhotoManager];
+    
+    // Attempt to retrieve content for first page
+    _pictures = [_photoManager getListOfPhotoMetaDataForPage:1];
+    
+    // If no content is available locally, then retrieve it from the web
+    if (!_pictures) {
+        NSString *notificationName;
+        [_photoManager retrieveListOfPhotoMetaDataForPage:1 forNotificationName:&notificationName];
+        
+        // Listen to end retrieval notification
+        if (notificationName)
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayPhotoMetaData:) name:notificationName object:_photoManager];
+        
+        _pictures = [NSArray array];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -47,22 +68,34 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return _pictures.count;
+    NSInteger lastSectionIndex = [self numberOfSectionsInCollectionView:self.collectionView] - 1;
+    
+    if(section < lastSectionIndex)
+        return kMaxNumberOrRowsPerSection;
+    else {
+        NSInteger rows = _pictures.count%kMaxNumberOrRowsPerSection;
+        return rows == 0 ? kMaxNumberOrRowsPerSection : rows;
+    }
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return _pictures.count;
+    NSInteger additionalSection = _pictures.count%kMaxNumberOrRowsPerSection > 0 ? 1 : 0;
+    return _pictures.count / kMaxNumberOrRowsPerSection + additionalSection;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PhotoViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:photoViewCellIdentifier forIndexPath:indexPath];
     if (!cell.photoViewCellDelegate)
         cell.photoViewCellDelegate = self;
-    
-    [cell setImage:[UIImage imageNamed:_pictures[indexPath.row]]];
+
+    [cell setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%02d.jpg", indexPath.row + 1]]];
     
     return cell;
 }
@@ -323,6 +356,24 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     aspectFillRect.size.height *= scale;
     
     return aspectFillRect;
+}
+
+- (void)displayPhotoMetaData:(NSNotification*)notification {
+    // Stop listening for notification
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    // Check if notifier was from shared instance of PhotoManager
+    if (notification.object == _photoManager) {
+        // Attempt to retrieve the content
+        _pictures = [_photoManager getListOfPhotoMetaDataForPage:1];
+        
+        // If no content is available, create an empty array
+        if (!_pictures)
+            _pictures = [NSArray array];
+        
+        // Reload collection view
+        [self.collectionView reloadData];
+    }
 }
 
 @end

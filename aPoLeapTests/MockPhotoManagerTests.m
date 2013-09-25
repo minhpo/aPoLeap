@@ -72,7 +72,8 @@
     mockRemoteCommunicator.remoteCommunicatorDelegate = _photoManager;
     [_photoManager setMockRemoteCommunicator:mockRemoteCommunicator];
     
-    [_photoManager retrieveListOfPhotoMetaDataForPage:1];
+    NSString *notificationName;
+    [_photoManager retrieveListOfPhotoMetaDataForPage:1 forNotificationName:&notificationName];
     
     XCTAssertTrue(_photoManager.didNotify, @"Expected a notification when finished retrieving the list of photo metadata");
 }
@@ -86,7 +87,8 @@
     mockRemoteCommunicator.response = responseObject;
     [_photoManager setMockRemoteCommunicator:mockRemoteCommunicator];
     
-    [_photoManager retrieveListOfPhotoMetaDataForPage:1];
+    NSString *notificationName;
+    [_photoManager retrieveListOfPhotoMetaDataForPage:1 forNotificationName:&notificationName];
     
     id content = [_photoManager getListOfPhotoMetaDataForPage:1];
     

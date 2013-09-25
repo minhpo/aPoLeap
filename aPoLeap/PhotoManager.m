@@ -50,8 +50,10 @@ enum {
     return [_storageManager getContentForKey:[[NSString stringWithFormat:_listOfPhotoMetaDataUrlTemplate, page] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
 }
 
-- (void)retrieveListOfPhotoMetaDataForPage:(NSInteger)page {
-    [self retrieveDataFromUrl:[NSString stringWithFormat:_listOfPhotoMetaDataUrlTemplate, page] forRequestCode:kRequestCodeForListOfPhotoMetaData];
+- (void)retrieveListOfPhotoMetaDataForPage:(NSInteger)page forNotificationName:(NSString**)notificationName {
+    NSString *url = [NSString stringWithFormat:_listOfPhotoMetaDataUrlTemplate, page];
+    *notificationName = url;
+    [self retrieveDataFromUrl:url forRequestCode:kRequestCodeForListOfPhotoMetaData];
 }
 
 #pragma mark - Private methods
