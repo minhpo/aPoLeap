@@ -11,12 +11,12 @@
 
 @implementation MockPhotoManager
 
-- (id)initWithListOfPhotosUrlTemplate:(NSString*)listOfPhotosUrlTemplate photoUrlTemplate:(NSString*)photoUrlTemplate {
+- (id)init {
     self = [super init];
     
     if (self) {
-        _listOfPhotosUrlTemplate = listOfPhotosUrlTemplate;
-        _photoUrlTemplate = photoUrlTemplate;
+        _listOfPhotoMetaDataUrlTemplate = kMockListOfPhotoMetaDataUrlTemplate;
+        _photoUrlTemplate = kMockPhotoUrlTemplate;
         
         _remoteCommunicator = nil;
     }
@@ -32,8 +32,8 @@
 
 #pragma mark - RemoteCommunicatorDelegate
 
-- (void)remoteCommunicator:(RemoteCommunicator*)remoteCommunicator didReceiveResponse:(id)response fromUrl:(NSString*)url withError:(NSError*)error {
-    [super remoteCommunicator:remoteCommunicator didReceiveResponse:response fromUrl:url withError:error];
+- (void)remoteCommunicator:(RemoteCommunicator*)remoteCommunicator didReceiveResponse:(id)response fromUrl:(NSString*)url forRequestCode:(NSInteger)requestCode withError:(NSError*)error {
+    [super remoteCommunicator:remoteCommunicator didReceiveResponse:response fromUrl:url forRequestCode:requestCode withError:error];
     
     self.didNotify = YES;
 }

@@ -12,6 +12,6 @@
 
 @protocol RemoteCommunicatorDelegate <NSObject>
 
-- (void)remoteCommunicator:(RemoteCommunicator*)remoteCommunicator didReceiveResponse:(id)response fromUrl:(NSString*)url withError:(NSError*)error;
+- (void)remoteCommunicator:(RemoteCommunicator*)remoteCommunicator didReceiveResponse:(id)response fromUrl:(NSString*)url forRequestCode:(NSInteger)requestCode withError:(NSError*)error;
 
 @end

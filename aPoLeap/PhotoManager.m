@@ -15,16 +15,13 @@
 
 static const NSInteger kSecondsInOneDay = 86400;
 
-typedef enum {
-    PhotoManagerRetrievingListOfPhotosState,
-    PhotoManagerRetrievingPhotoState,
-    PhotoManagerIdleState
-} PhotoManagerState;
+enum {
+    kRequestCodeForListOfPhotoMetaData,
+    kRequestCodeForPhoto
+};
 
 @interface PhotoManager () {
     TMCStorageManager *_storageManager;
-    
-    PhotoManagerState _state;
 }
 
 @end
@@ -35,10 +32,8 @@ typedef enum {
     self = [super init];
     
     if (self) {
-        _state = PhotoManagerIdleState;
-        
-        _listOfPhotosUrlTemplate = kListOfPhotosUrl;
-        _photoUrlTemplate = nil;
+        _listOfPhotoMetaDataUrlTemplate = kListOfPhotoMetaDataUrlTemplate;
+        _photoUrlTemplate = kPhotoUrlTemplate;
         
         _storageManager = [[TMCStorageManager alloc] initWithCacheExpiration:kSecondsInOneDay];
         
@@ -51,33 +46,28 @@ typedef enum {
 
 #pragma mark - Public methods
 
-- (NSArray*)getListOfPhotosForPage:(NSInteger)page {
-    return [_storageManager getContentForKey:[[NSString stringWithFormat:_listOfPhotosUrlTemplate, page] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
+- (NSArray*)getListOfPhotoMetaDataForPage:(NSInteger)page {
+    return [_storageManager getContentForKey:[[NSString stringWithFormat:_listOfPhotoMetaDataUrlTemplate, page] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
 }
 
-- (void)retrieveListOfPhotosForPage:(NSInteger)page {
-    if (_state == PhotoManagerIdleState) {
-        // Update state
-        _state = PhotoManagerRetrievingListOfPhotosState;
-        
-        [self retrieveDataFromUrl:[NSString stringWithFormat:_listOfPhotosUrlTemplate, page]];
-    }
+- (void)retrieveListOfPhotoMetaDataForPage:(NSInteger)page {
+    [self retrieveDataFromUrl:[NSString stringWithFormat:_listOfPhotoMetaDataUrlTemplate, page] forRequestCode:kRequestCodeForListOfPhotoMetaData];
 }
 
 #pragma mark - Private methods
 
-- (void)retrieveDataFromUrl:(NSString*)url {
-    [_remoteCommunicator getResponseFromUrl:url];
+- (void)retrieveDataFromUrl:(NSString*)url forRequestCode:(NSInteger)requestCode {
+    [_remoteCommunicator getResponseFromUrl:url forRequestCode:requestCode];
 }
 
 #pragma mark - RemoteCommunicatorDelegate
 
-- (void)remoteCommunicator:(RemoteCommunicator*)remoteCommunicator didReceiveResponse:(id)response fromUrl:(NSString*)url withError:(NSError*)error {
+- (void)remoteCommunicator:(RemoteCommunicator*)remoteCommunicator didReceiveResponse:(id)response fromUrl:(NSString*)url forRequestCode:(NSInteger)requestCode withError:(NSError*)error {
     NSDictionary *userInfo = nil;
     if (error)
         [NSDictionary dictionaryWithObject:error forKey:NSUnderlyingErrorKey];
     else {
-        if (_state == PhotoManagerRetrievingListOfPhotosState) {
+        if (requestCode == kRequestCodeForListOfPhotoMetaData) {
             // Extract list of photo meta data
             NSArray *listOfPhotoMetaData = [PhotoMetaDataFactory getArrayOfPhotoMetaDataObjectsFromInput:response];
             
@@ -86,9 +76,6 @@ typedef enum {
                 [_storageManager saveContent:listOfPhotoMetaData forKey:[url getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
         }
     }
-    
-    // Update state
-    _state = PhotoManagerIdleState;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:url object:self userInfo:userInfo];
 }

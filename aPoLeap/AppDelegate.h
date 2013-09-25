@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class PhotoManager;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
+
+- (PhotoManager*)getSharedPhotoManager;
 
 @property (strong, nonatomic) UIWindow *window;
 

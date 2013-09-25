@@ -9,18 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "RemoteCommunicatorDelegate.h"
 
-static const NSString *kListOfPhotosUrl = @"http://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=b0d9a3d095c12dedaf5c32380bc6586f&per_page=10&format=json&nojsoncallback=1&page=%d";
+static const NSString *kListOfPhotoMetaDataUrlTemplate = @"http://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=b0d9a3d095c12dedaf5c32380bc6586f&per_page=10&format=json&nojsoncallback=1&page=%d";
+static const NSString *kPhotoUrlTemplate = @"http://farm%@.static.flickr.com/%@/%@_%@_m.jpg";
 
 @class RemoteCommunicator;
 
 @interface PhotoManager : NSObject <RemoteCommunicatorDelegate> {
     @protected
     RemoteCommunicator *_remoteCommunicator;
-    NSString *_listOfPhotosUrlTemplate;
+    NSString *_listOfPhotoMetaDataUrlTemplate;
     NSString *_photoUrlTemplate;
 }
 
-- (NSArray*)getListOfPhotosForPage:(NSInteger)page;
-- (void)retrieveListOfPhotosForPage:(NSInteger)page;
+- (NSArray*)getListOfPhotoMetaDataForPage:(NSInteger)page;
+- (void)retrieveListOfPhotoMetaDataForPage:(NSInteger)page;
 
 @end

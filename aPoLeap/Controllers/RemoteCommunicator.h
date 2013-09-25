@@ -12,7 +12,7 @@
 
 @interface RemoteCommunicator : NSObject
 
-- (void)getResponseFromUrl:(NSString*)url;
+- (void)getResponseFromUrl:(NSString*)url forRequestCode:(NSInteger)requestCode;
 
 @property (weak) id<RemoteCommunicatorDelegate>remoteCommunicatorDelegate;
 

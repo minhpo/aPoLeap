@@ -11,9 +11,9 @@
 
 @implementation MockRemoteCommunicator
 
-- (void)getResponseFromUrl:(NSString*)url {
-    if ([self.remoteCommunicatorDelegate respondsToSelector:@selector(remoteCommunicator:didReceiveResponse:fromUrl:withError:)]) {
-        [self.remoteCommunicatorDelegate remoteCommunicator:self didReceiveResponse:self.response fromUrl:url withError:self.error];
+- (void)getResponseFromUrl:(NSString*)url forRequestCode:(NSInteger)requestCode{
+    if ([self.remoteCommunicatorDelegate respondsToSelector:@selector(remoteCommunicator:didReceiveResponse:fromUrl:forRequestCode:withError:)]) {
+        [self.remoteCommunicatorDelegate remoteCommunicator:self didReceiveResponse:self.response fromUrl:url forRequestCode:requestCode withError:self.error];
     }
 }
 

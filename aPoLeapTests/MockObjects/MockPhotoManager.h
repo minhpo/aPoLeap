@@ -8,13 +8,13 @@
 
 #import "PhotoManager.h"
 
-static const NSString* kMockListOfPhotosUrl = @"kMockListOfPhotosUrl%d";
+static const NSString* kMockListOfPhotoMetaDataUrlTemplate = @"kMockListOfPhotoMetaDataUrlTemplate%d";
+static const NSString* kMockPhotoUrlTemplate = @"kMockPhotoUrlTemplate";
 
 @class MockRemoteCommunicator;
 
 @interface MockPhotoManager : PhotoManager
 
-- (id)initWithListOfPhotosUrlTemplate:(NSString*)listOfPhotosUrlTemplate photoUrlTemplate:(NSString*)photoUrlTemplate;
 - (void)setMockRemoteCommunicator:(MockRemoteCommunicator*)mockRemoteCommunictor;
 
 @property (assign) BOOL didNotify;

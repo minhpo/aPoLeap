@@ -37,13 +37,11 @@
 		226F032E17F0D6C700DD7194 /* PhotoCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 226F032D17F0D6C700DD7194 /* PhotoCollectionView.xib */; };
 		226F033417F0D6ED00DD7194 /* PhotoCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 226F032D17F0D6C700DD7194 /* PhotoCollectionView.xib */; };
 		226F033C17F0D83800DD7194 /* PhotoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F033B17F0D83800DD7194 /* PhotoCollectionViewController.m */; };
-		226F033D17F0D83800DD7194 /* PhotoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F033B17F0D83800DD7194 /* PhotoCollectionViewController.m */; };
 		226F033F17F0DA7000DD7194 /* PhotoViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 226F033E17F0DA7000DD7194 /* PhotoViewCell.xib */; };
 		226F034017F0DA7000DD7194 /* PhotoViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 226F033E17F0DA7000DD7194 /* PhotoViewCell.xib */; };
 		226F034317F0DB2200DD7194 /* PhotoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F034217F0DB2200DD7194 /* PhotoViewCell.m */; };
 		226F034417F0DB2200DD7194 /* PhotoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F034217F0DB2200DD7194 /* PhotoViewCell.m */; };
 		228264B717F1053400A8B629 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 228264B617F1053400A8B629 /* PhotoViewController.m */; };
-		228264B817F1053400A8B629 /* PhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 228264B617F1053400A8B629 /* PhotoViewController.m */; };
 		228264BA17F1055100A8B629 /* PhotoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 228264B917F1055100A8B629 /* PhotoView.xib */; };
 		228264BB17F1055100A8B629 /* PhotoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 228264B917F1055100A8B629 /* PhotoView.xib */; };
 		22A014ED17F163B8008BE2BD /* 01.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 22A014EA17F163B8008BE2BD /* 01.jpg */; };
@@ -475,7 +473,6 @@
 			files = (
 				226F034417F0DB2200DD7194 /* PhotoViewCell.m in Sources */,
 				22261D7B17F23E07004675ED /* NSString+Encryption.m in Sources */,
-				228264B817F1053400A8B629 /* PhotoViewController.m in Sources */,
 				220D23F117F2A22D001FD5AB /* MockPhotoManagerTests.m in Sources */,
 				220D23FC17F2B4D4001FD5AB /* MockPhotoManager.m in Sources */,
 				220D23FF17F2B518001FD5AB /* MockRemoteCommunicator.m in Sources */,
@@ -485,7 +482,6 @@
 				226F032317F0D52500DD7194 /* MockPhotoCollectionViewControllerTests.m in Sources */,
 				22261D7617F23D74004675ED /* TMCStorageManager.m in Sources */,
 				220D23EF17F24003001FD5AB /* PhotoManager.m in Sources */,
-				226F033D17F0D83800DD7194 /* PhotoCollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
