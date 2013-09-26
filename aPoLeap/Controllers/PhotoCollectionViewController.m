@@ -13,7 +13,6 @@
 #import "PhotoManager.h"
 
 static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
-static const NSInteger kMaxNumberOrRowsPerSection = 3;
 
 @interface PhotoCollectionViewController () {
     PhotoViewController *_photoViewController;
@@ -24,6 +23,8 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
     BOOL _didEndPinch;
     
     PhotoManager *_photoManager;
+    
+    NSInteger _maxNumberOrRowsPerSection;
 }
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
@@ -35,13 +36,15 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+    
     // Register xib for collection view
     [self.collectionView registerNib:[UINib nibWithNibName:@"PhotoViewCell" bundle:nil] forCellWithReuseIdentifier:photoViewCellIdentifier];
     
     // Set layout properties for the collection view
     self.flowLayout.itemSize = CGSizeMake(100.0, 100.0);
-    self.flowLayout.minimumInteritemSpacing = 10;
+    
+    // Set additional layout properties
+    [self setMaxRowAndMinimumInteritemSpacingForWidth:self.view.frame.size.width];
     
     // Get shared instance of PhotoManager object
     _photoManager = [(AppDelegate*)[UIApplication sharedApplication].delegate getSharedPhotoManager];
@@ -62,6 +65,22 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
     }
 }
 
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+    // Reset additional layout properties on orientation change
+    if (toInterfaceOrientation == UIInterfaceOrientationPortrait)
+        [self setMaxRowAndMinimumInteritemSpacingForWidth:self.view.frame.size.width];
+    else
+        [self setMaxRowAndMinimumInteritemSpacingForWidth:self.view.frame.size.height];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    
+    [self.collectionView reloadData];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -78,16 +97,16 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
     NSInteger lastSectionIndex = [self numberOfSectionsInCollectionView:self.collectionView] - 1;
     
     if(section < lastSectionIndex)
-        return kMaxNumberOrRowsPerSection;
+        return _maxNumberOrRowsPerSection;
     else {
-        NSInteger rows = _pictures.count%kMaxNumberOrRowsPerSection;
-        return rows == 0 ? kMaxNumberOrRowsPerSection : rows;
+        NSInteger rows = _pictures.count%_maxNumberOrRowsPerSection;
+        return rows == 0 ? _maxNumberOrRowsPerSection : rows;
     }
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    NSInteger additionalSection = _pictures.count%kMaxNumberOrRowsPerSection > 0 ? 1 : 0;
-    return _pictures.count / kMaxNumberOrRowsPerSection + additionalSection;
+    NSInteger additionalSection = _pictures.count%_maxNumberOrRowsPerSection > 0 ? 1 : 0;
+    return _pictures.count / _maxNumberOrRowsPerSection + additionalSection;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -95,7 +114,7 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
     if (!cell.photoViewCellDelegate)
         cell.photoViewCellDelegate = self;
 
-    PhotoMetaData *photoMetaData = _pictures[indexPath.section*kMaxNumberOrRowsPerSection + indexPath.row];
+    PhotoMetaData *photoMetaData = _pictures[indexPath.section*_maxNumberOrRowsPerSection + indexPath.row];
     [cell setPhotoMetaData:photoMetaData];
     
     return cell;
@@ -355,6 +374,13 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
 }
 
 #pragma mark - Prive methods
+
+- (void)setMaxRowAndMinimumInteritemSpacingForWidth:(CGFloat)width {
+    _maxNumberOrRowsPerSection = width / self.flowLayout.itemSize.width;
+    
+    CGFloat remainingWidth = (CGFloat)width - _maxNumberOrRowsPerSection*self.flowLayout.itemSize.width;
+    self.flowLayout.minimumInteritemSpacing = remainingWidth/(_maxNumberOrRowsPerSection-1);
+}
 
 - (CGRect)getAspectFillRectForTargetRect:(CGRect)targetRect inRefenceRect:(CGRect)referenceRect {
     CGFloat scale = referenceRect.size.height / fminf(targetRect.size.width, targetRect.size.height);
