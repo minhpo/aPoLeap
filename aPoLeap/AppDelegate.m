@@ -10,6 +10,7 @@
 #import "PhotoCollectionViewController.h"
 
 #import "PhotoManager.h"
+#import "AFNetworkActivityIndicatorManager.h"
 
 @interface AppDelegate () {
     PhotoManager *_photoManager;
@@ -21,6 +22,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
+    
     // Create new window
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     // Set window to be the key window and put it in front of all other windows

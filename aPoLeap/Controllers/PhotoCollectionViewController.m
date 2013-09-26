@@ -95,7 +95,8 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
     if (!cell.photoViewCellDelegate)
         cell.photoViewCellDelegate = self;
 
-    [cell setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%02d.jpg", indexPath.row + 1]]];
+    PhotoMetaData *photoMetaData = _pictures[indexPath.section*kMaxNumberOrRowsPerSection + indexPath.row];
+    [cell setPhotoMetaData:photoMetaData];
     
     return cell;
 }

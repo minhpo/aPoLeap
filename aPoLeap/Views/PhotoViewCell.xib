@@ -17,11 +17,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </imageView>
+                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="cI2-4y-OyY">
+                        <rect key="frame" x="15" y="15" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    </activityIndicatorView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <gestureRecognizers/>
             <connections>
+                <outlet property="activityIndicatorView" destination="cI2-4y-OyY" id="msG-Av-Pbu"/>
                 <outlet property="imageView" destination="ok4-rC-YYS" id="56w-Ey-Ncg"/>
             </connections>
         </collectionViewCell>

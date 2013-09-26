@@ -11,14 +11,11 @@
 #import "PhotoMetaDataFactory.h"
 #import "RemoteCommunicator.h"
 
+#import "PhotoMetaData.h"
+
 #import "NSString+Encryption.h"
 
 static const NSInteger kSecondsInOneDay = 86400;
-
-enum {
-    kRequestCodeForListOfPhotoMetaData,
-    kRequestCodeForPhoto
-};
 
 @interface PhotoManager () {
     TMCStorageManager *_storageManager;
@@ -56,6 +53,26 @@ enum {
     [self retrieveDataFromUrl:url forRequestCode:kRequestCodeForListOfPhotoMetaData];
 }
 
+- (UIImage*)getImageUsingPhotoMetaData:(PhotoMetaData*)photoMetaData {
+    NSString *photoUrl = [NSString stringWithFormat:_photoUrlTemplate,
+                          photoMetaData.farm,
+                          photoMetaData.server,
+                          photoMetaData.photoId,
+                          photoMetaData.secret];
+    
+    return [_storageManager getContentForKey:[photoUrl getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
+}
+
+- (void)retrievePhotoUsingPhotoMetaData:(PhotoMetaData*)photoMetaData forNotificationName:(NSString**)notificationName {
+    NSString *photoUrl = [NSString stringWithFormat:_photoUrlTemplate,
+                          photoMetaData.farm,
+                          photoMetaData.server,
+                          photoMetaData.photoId,
+                          photoMetaData.secret];
+    *notificationName = photoUrl;
+    [self retrieveDataFromUrl:photoUrl forRequestCode:kRequestCodeForPhoto];
+}
+
 #pragma mark - Private methods
 
 - (void)retrieveDataFromUrl:(NSString*)url forRequestCode:(NSInteger)requestCode {
@@ -76,6 +93,11 @@ enum {
             // Persist list of photo meta data
             if (listOfPhotoMetaData)
                 [_storageManager saveContent:listOfPhotoMetaData forKey:[url getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
+        }
+        else {
+            if (response
+                && [response isKindOfClass:[UIImage class]])
+                [_storageManager saveContent:response forKey:[url getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
         }
     }
     

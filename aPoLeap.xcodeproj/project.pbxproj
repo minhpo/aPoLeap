@@ -48,6 +48,7 @@
 		22A014EE17F163B8008BE2BD /* 02.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 22A014EB17F163B8008BE2BD /* 02.jpg */; };
 		22A014EF17F163B8008BE2BD /* 03.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 22A014EC17F163B8008BE2BD /* 03.jpg */; };
 		22DF1BE017F1F70A0002F2F0 /* MockPhotoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22DF1BDF17F1F70A0002F2F0 /* MockPhotoCollectionViewController.m */; };
+		22F5539B17F4034800195B2C /* not_available.png in Resources */ = {isa = PBXBuildFile; fileRef = 22F5539A17F4034800195B2C /* not_available.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +113,8 @@
 		22A014F017F1642D008BE2BD /* PhotoViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoViewDataSource.h; path = Protocols/PhotoViewDataSource.h; sourceTree = "<group>"; };
 		22DF1BDE17F1F70A0002F2F0 /* MockPhotoCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MockPhotoCollectionViewController.h; path = MockObjects/MockPhotoCollectionViewController.h; sourceTree = "<group>"; };
 		22DF1BDF17F1F70A0002F2F0 /* MockPhotoCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MockPhotoCollectionViewController.m; path = MockObjects/MockPhotoCollectionViewController.m; sourceTree = "<group>"; };
+		22F5539917F3FD5300195B2C /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Constants.h; path = Utilities/Constants.h; sourceTree = "<group>"; };
+		22F5539A17F4034800195B2C /* not_available.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = not_available.png; sourceTree = "<group>"; };
 		903400B621934B93A0A79B84 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		C073DF965728472C8E87490F /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -194,6 +197,7 @@
 		226F02FD17F0D52400DD7194 /* aPoLeap */ = {
 			isa = PBXGroup;
 			children = (
+				22F5539817F3FD1C00195B2C /* Utilities */,
 				22249E3617F36BA20076ACB2 /* Models */,
 				22261D7717F23DE5004675ED /* Categories */,
 				228264B317F0E94E00A8B629 /* Protocols */,
@@ -281,6 +285,7 @@
 		226F033617F0D81C00DD7194 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				22F5539A17F4034800195B2C /* not_available.png */,
 				22A014EA17F163B8008BE2BD /* 01.jpg */,
 				22A014EB17F163B8008BE2BD /* 02.jpg */,
 				22A014EC17F163B8008BE2BD /* 03.jpg */,
@@ -311,6 +316,14 @@
 				220D23FE17F2B518001FD5AB /* MockRemoteCommunicator.m */,
 			);
 			name = MockObjects;
+			sourceTree = "<group>";
+		};
+		22F5539817F3FD1C00195B2C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				22F5539917F3FD5300195B2C /* Constants.h */,
+			);
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -399,6 +412,7 @@
 				226F033F17F0DA7000DD7194 /* PhotoViewCell.xib in Resources */,
 				226F030217F0D52400DD7194 /* InfoPlist.strings in Resources */,
 				228264BA17F1055100A8B629 /* PhotoView.xib in Resources */,
+				22F5539B17F4034800195B2C /* not_available.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

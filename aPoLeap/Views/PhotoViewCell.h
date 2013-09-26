@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @protocol PhotoViewCellDelegate;
+@class PhotoMetaData;
 
 @interface PhotoViewCell : UICollectionViewCell <UIGestureRecognizerDelegate>
 
 - (UIImage*)image;
+- (void)setPhotoMetaData:(PhotoMetaData*)photoMetaData;
 - (void)setImage:(UIImage*)image;
 
 @property (nonatomic, weak) id<PhotoViewCellDelegate>photoViewCellDelegate;

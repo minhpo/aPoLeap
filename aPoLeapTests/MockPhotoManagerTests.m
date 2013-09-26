@@ -97,4 +97,6 @@
     XCTAssertTrue([content isKindOfClass:[NSArray class]], @"Expected an array class");
 }
 
+//TODO: Add tests for retrieving images
+
 @end

@@ -9,12 +9,18 @@
 #import "PhotoViewCell.h"
 #import "PhotoViewCellDelegate.h"
 
+#import "PhotoManager.h"
+
 @interface PhotoViewCell () {
     UIPanGestureRecognizer *_panGestureRecognizer;
     UIPinchGestureRecognizer *_pinchGestureRecognizer;
+    
+    PhotoManager *_photoManager;
+    PhotoMetaData *_photoMetaData;
 }
 
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 @end
 
 @implementation PhotoViewCell
@@ -23,6 +29,8 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
+    _photoManager = [(AppDelegate*)[UIApplication sharedApplication].delegate getSharedPhotoManager];
     
     _pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGestureRecognized:)];
     _pinchGestureRecognizer.delegate = self;
@@ -35,6 +43,10 @@
     [self addGestureRecognizer:_panGestureRecognizer];
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - Public methods
 
 - (UIImage*)image {
@@ -45,7 +57,53 @@
     self.imageView.image = image;
 }
 
+- (void)setPhotoMetaData:(PhotoMetaData*)photoMetaData {
+    // Remove self as observer to stop receiving notifications for other photo metadata
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    // Update reference of photo metadata
+    _photoMetaData = photoMetaData;
+    
+    // Attempt to get image from photo manager
+    UIImage *image = [_photoManager getImageUsingPhotoMetaData:_photoMetaData];
+    
+    // If no image is available, retrieve it from remote
+    if (!image) {
+        NSString *notificationName;
+        [_photoManager retrievePhotoUsingPhotoMetaData:_photoMetaData forNotificationName:&notificationName];
+        
+        // Listen to end retrieval notification
+        if (notificationName)
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayImage:) name:notificationName object:_photoManager];
+        
+        // Start loading animation
+        [self.activityIndicatorView startAnimating];
+    }
+    else {
+        self.imageView.image = image;
+        
+        // Stop loading animation
+        [self.activityIndicatorView stopAnimating];
+    }
+}
+
 #pragma mark - Private methods
+
+- (void)displayImage:(NSNotification*)notification {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    // Attempt to get image from photo manager
+    UIImage *image = [_photoManager getImageUsingPhotoMetaData:_photoMetaData];
+    
+    // Display image
+    if (!image)
+        image = [UIImage imageNamed:@"not_available"];
+    
+    self.imageView.image = image;
+    
+    // Stop loading animation
+    [self.activityIndicatorView stopAnimating];
+}
 
 - (void)pinchGestureRecognized:(UIPinchGestureRecognizer*)sender {
     if (sender.state == UIGestureRecognizerStateBegan
