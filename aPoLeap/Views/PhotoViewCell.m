@@ -53,10 +53,6 @@
     return self.imageView.image;
 }
 
-- (void)setImage:(UIImage*)image {
-    self.imageView.image = image;
-}
-
 - (void)setPhotoMetaData:(PhotoMetaData*)photoMetaData {
     // Remove self as observer to stop receiving notifications for other photo metadata
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -66,6 +62,9 @@
     
     // Attempt to get image from photo manager
     UIImage *image = [_photoManager getImageUsingPhotoMetaData:_photoMetaData];
+    
+    // Set new image or clear old image
+    self.imageView.image = image;
     
     // If no image is available, retrieve it from remote
     if (!image) {
@@ -80,8 +79,6 @@
         [self.activityIndicatorView startAnimating];
     }
     else {
-        self.imageView.image = image;
-        
         // Stop loading animation
         [self.activityIndicatorView stopAnimating];
     }

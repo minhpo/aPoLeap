@@ -242,7 +242,8 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
                              
                              CGRect aspectFillRect = [self getAspectFillRectForTargetRect:targetRect inRefenceRect:referenceRect];
                              _snapShot.frame = aspectFillRect;
-                             _snapShot.center = _currentSelectedCell.center;
+                             CGPoint convertedPoint = [self.view convertPoint:_currentSelectedCell.center fromView:self.collectionView];
+                             _snapShot.center = convertedPoint;
                          }
                          completion:^(BOOL finished){
                              [_snapShot removeFromSuperview];
@@ -292,7 +293,9 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
     
     // Hide the new cell
     _currentSelectedCell.alpha = 0;
-    [_currentSelectedCell setNeedsLayout];
+    
+    // Scroll collection view to this cell
+    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
 }
 
 #pragma mark - PhotoViewDataSource

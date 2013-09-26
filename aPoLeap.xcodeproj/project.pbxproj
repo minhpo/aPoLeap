@@ -197,17 +197,17 @@
 		226F02FD17F0D52400DD7194 /* aPoLeap */ = {
 			isa = PBXGroup;
 			children = (
-				22F5539817F3FD1C00195B2C /* Utilities */,
-				22249E3617F36BA20076ACB2 /* Models */,
-				22261D7717F23DE5004675ED /* Categories */,
-				228264B317F0E94E00A8B629 /* Protocols */,
-				226F033517F0D80D00DD7194 /* Resources */,
-				226F032F17F0D6CA00DD7194 /* Controllers */,
-				226F032C17F0D69500DD7194 /* Views */,
 				226F030617F0D52400DD7194 /* AppDelegate.h */,
 				226F030717F0D52400DD7194 /* AppDelegate.m */,
 				226F030F17F0D52400DD7194 /* Images.xcassets */,
+				22261D7717F23DE5004675ED /* Categories */,
+				226F032F17F0D6CA00DD7194 /* Controllers */,
+				22249E3617F36BA20076ACB2 /* Models */,
+				228264B317F0E94E00A8B629 /* Protocols */,
+				226F033517F0D80D00DD7194 /* Resources */,
 				226F02FE17F0D52400DD7194 /* Supporting Files */,
+				22F5539817F3FD1C00195B2C /* Utilities */,
+				226F032C17F0D69500DD7194 /* Views */,
 			);
 			path = aPoLeap;
 			sourceTree = "<group>";
@@ -258,18 +258,18 @@
 		226F032F17F0D6CA00DD7194 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				22261D7317F23D74004675ED /* TMCStorageManager.h */,
-				22261D7417F23D74004675ED /* TMCStorageManager.m */,
 				226F033A17F0D83800DD7194 /* PhotoCollectionViewController.h */,
 				226F033B17F0D83800DD7194 /* PhotoCollectionViewController.m */,
-				228264B517F1053400A8B629 /* PhotoViewController.h */,
-				228264B617F1053400A8B629 /* PhotoViewController.m */,
 				220D23EC17F24003001FD5AB /* PhotoManager.h */,
 				220D23ED17F24003001FD5AB /* PhotoManager.m */,
-				220D23F517F2B0D6001FD5AB /* RemoteCommunicator.h */,
-				220D23F617F2B0D6001FD5AB /* RemoteCommunicator.m */,
 				22249E3217F36B9F0076ACB2 /* PhotoMetaDataFactory.h */,
 				22249E3317F36B9F0076ACB2 /* PhotoMetaDataFactory.m */,
+				228264B517F1053400A8B629 /* PhotoViewController.h */,
+				228264B617F1053400A8B629 /* PhotoViewController.m */,
+				220D23F517F2B0D6001FD5AB /* RemoteCommunicator.h */,
+				220D23F617F2B0D6001FD5AB /* RemoteCommunicator.m */,
+				22261D7317F23D74004675ED /* TMCStorageManager.h */,
+				22261D7417F23D74004675ED /* TMCStorageManager.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -298,8 +298,8 @@
 			isa = PBXGroup;
 			children = (
 				228264B417F0E97000A8B629 /* PhotoViewCellDelegate.h */,
-				228264BC17F1094C00A8B629 /* PhotoViewDelegate.h */,
 				22A014F017F1642D008BE2BD /* PhotoViewDataSource.h */,
+				228264BC17F1094C00A8B629 /* PhotoViewDelegate.h */,
 				220D23F917F2B101001FD5AB /* RemoteCommunicatorDelegate.h */,
 			);
 			name = Protocols;
