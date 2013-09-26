@@ -161,12 +161,16 @@ static const NSInteger kMaxNumberOrRowsPerSection = 3;
         // Create the full screen view controller
         if (_photoViewController) {
             [_photoViewController.view removeFromSuperview];
+            [_photoViewController removeFromParentViewController];
         }
         
         _photoViewController = [[PhotoViewController alloc] initWithNibName:@"PhotoView" bundle:nil];
         
         // Add it to the root view hierarchy
         [self.view addSubview:_photoViewController.view];
+        
+        // Add photo viewcontroller to parent viewcontroller to receive view state change events too
+        [self addChildViewController:_photoViewController];
         
         // Set delegate and datasource to self to react to events
         _photoViewController.photoViewDelegate = self;

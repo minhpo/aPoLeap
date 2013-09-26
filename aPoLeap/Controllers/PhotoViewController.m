@@ -52,6 +52,29 @@
     [self.view addGestureRecognizer:_oneFingerPanGestureRecognizer];
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    
+    // Set views to be visible
+    self.leftImageView.alpha = 1;
+    self.rightImageView.alpha = 1;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+    // Set views to be invisible to avoid the effect of short flickering at start of rotation
+    self.leftImageView.alpha = 0;
+    self.rightImageView.alpha = 0;
+    
+    // Reposition image views on orientation change
+    [UIView animateWithDuration:duration
+                     animations:^(){
+                         self.leftImageView.center = CGPointMake(self.view.center.x - self.view.frame.size.height, self.leftImageView.center.y);
+                         self.rightImageView.center = CGPointMake(self.view.center.x + self.view.frame.size.height, self.rightImageView.center.y);
+                     }];
+}
+
 #pragma mark - Public methods
 
 - (UIImageView*)getImageView {
