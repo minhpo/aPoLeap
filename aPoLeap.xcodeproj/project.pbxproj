@@ -33,7 +33,6 @@
 		226F031817F0D52400DD7194 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 226F02F717F0D52400DD7194 /* Foundation.framework */; };
 		226F031917F0D52400DD7194 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 226F02FB17F0D52400DD7194 /* UIKit.framework */; };
 		226F032117F0D52500DD7194 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 226F031F17F0D52500DD7194 /* InfoPlist.strings */; };
-		226F032317F0D52500DD7194 /* MockPhotoCollectionViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F032217F0D52500DD7194 /* MockPhotoCollectionViewControllerTests.m */; };
 		226F032E17F0D6C700DD7194 /* PhotoCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 226F032D17F0D6C700DD7194 /* PhotoCollectionView.xib */; };
 		226F033417F0D6ED00DD7194 /* PhotoCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 226F032D17F0D6C700DD7194 /* PhotoCollectionView.xib */; };
 		226F033C17F0D83800DD7194 /* PhotoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F033B17F0D83800DD7194 /* PhotoCollectionViewController.m */; };
@@ -95,7 +94,6 @@
 		226F031617F0D52400DD7194 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		226F031E17F0D52500DD7194 /* aPoLeapTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "aPoLeapTests-Info.plist"; sourceTree = "<group>"; };
 		226F032017F0D52500DD7194 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		226F032217F0D52500DD7194 /* MockPhotoCollectionViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MockPhotoCollectionViewControllerTests.m; sourceTree = "<group>"; };
 		226F032D17F0D6C700DD7194 /* PhotoCollectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoCollectionView.xib; path = Views/PhotoCollectionView.xib; sourceTree = "<group>"; };
 		226F033A17F0D83800DD7194 /* PhotoCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoCollectionViewController.h; path = Controllers/PhotoCollectionViewController.h; sourceTree = "<group>"; };
 		226F033B17F0D83800DD7194 /* PhotoCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoCollectionViewController.m; path = Controllers/PhotoCollectionViewController.m; sourceTree = "<group>"; };
@@ -226,7 +224,6 @@
 		226F031C17F0D52500DD7194 /* aPoLeapTests */ = {
 			isa = PBXGroup;
 			children = (
-				226F032217F0D52500DD7194 /* MockPhotoCollectionViewControllerTests.m */,
 				220D23F017F2A22C001FD5AB /* MockPhotoManagerTests.m */,
 				22DF1BDD17F1F6DD0002F2F0 /* MockObjects */,
 				226F031D17F0D52500DD7194 /* Supporting Files */,
@@ -493,7 +490,6 @@
 				22249E3A17F36BDA0076ACB2 /* PhotoMetaData.m in Sources */,
 				22DF1BE017F1F70A0002F2F0 /* MockPhotoCollectionViewController.m in Sources */,
 				22249E3517F36B9F0076ACB2 /* PhotoMetaDataFactory.m in Sources */,
-				226F032317F0D52500DD7194 /* MockPhotoCollectionViewControllerTests.m in Sources */,
 				22261D7617F23D74004675ED /* TMCStorageManager.m in Sources */,
 				220D23EF17F24003001FD5AB /* PhotoManager.m in Sources */,
 			);

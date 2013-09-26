@@ -17,6 +17,6 @@
 @property (nonatomic, weak) id<PhotoViewDataSource>photoViewDataSource;
 
 - (UIImageView*)getImageView;
-- (void)setContentForIndexPath:(NSIndexPath*)indexPath;
+- (void)setContentForIndex:(NSInteger)index;
 
 @end

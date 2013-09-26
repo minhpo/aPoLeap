@@ -15,7 +15,7 @@
     UIPanGestureRecognizer *_twoFingerPanGestureRecognizer;
     UIPinchGestureRecognizer *_pinchGestureRecognizer;
     
-    NSIndexPath *_centerIndexPath;
+    NSInteger _centerIndex;
     
     UIView *_leftSnapShot;
     UIView *_centerSnapShot;
@@ -62,7 +62,6 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
-    
     // Set views to be invisible to avoid the effect of short flickering at start of rotation
     self.leftImageView.alpha = 0;
     self.rightImageView.alpha = 0;
@@ -70,8 +69,8 @@
     // Reposition image views on orientation change
     [UIView animateWithDuration:duration
                      animations:^(){
-                         self.leftImageView.center = CGPointMake(self.view.center.x - self.view.frame.size.height, self.leftImageView.center.y);
-                         self.rightImageView.center = CGPointMake(self.view.center.x + self.view.frame.size.height, self.rightImageView.center.y);
+                         self.leftImageView.center = CGPointMake(self.view.center.x - self.view.frame.size.height, self.view.center.y);
+                         self.rightImageView.center = CGPointMake(self.view.center.x + self.view.frame.size.height, self.view.center.y);
                      }];
 }
 
@@ -81,42 +80,34 @@
     return self.centerImageView;
 }
 
-- (void)setContentForIndexPath:(NSIndexPath*)indexPath {
+- (void)setContentForIndex:(NSInteger)index {
     // Keep reference to index path
-    _centerIndexPath = indexPath;
+    _centerIndex = index;
 
     // Notify delegate of current index
-    if ([self.photoViewDelegate respondsToSelector:@selector(photoViewController:didScrollToIndexPath:)])
-        [self.photoViewDelegate photoViewController:self didScrollToIndexPath:_centerIndexPath];
+    if ([self.photoViewDelegate respondsToSelector:@selector(photoViewController:didScrollToIndex:)])
+        [self.photoViewDelegate photoViewController:self didScrollToIndex:_centerIndex];
     
     // Set center image
-    if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getImageForIndexPath:)])
-        self.centerImageView.image = [self.photoViewDataSource photoViewController:self getImageForIndexPath:indexPath];
+    if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getImageForIndex:)])
+        self.centerImageView.image = [self.photoViewDataSource photoViewController:self getImageForIndex:_centerIndex];
     
     // Set left image
-    if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getPreviousIndexPathForCurrentIndexPath:)]
-        && [self.photoViewDataSource respondsToSelector:@selector(photoViewController:getImageForIndexPath:)]) {
-        NSIndexPath *previousIndexPath = [self.photoViewDataSource photoViewController:self getPreviousIndexPathForCurrentIndexPath:indexPath];
-        if (previousIndexPath) {
-            UIImage *leftImage = [self.photoViewDataSource photoViewController:self getImageForIndexPath:previousIndexPath];
-            self.leftImageView.image = leftImage;
-            self.leftImageView.hidden = NO;
-        }
-        else
-            self.leftImageView.hidden = YES;
+    if (_centerIndex > 0) {
+        self.leftImageView.image = [self.photoViewDataSource photoViewController:self getImageForIndex:_centerIndex-1];
+        self.leftImageView.hidden = NO;
+    }
+    else {
+        self.leftImageView.hidden = YES;
     }
     
     // Set right image
-    if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getNextIndexPathForCurrentIndexPath:)]
-        && [self.photoViewDataSource respondsToSelector:@selector(photoViewController:getImageForIndexPath:)]) {
-        NSIndexPath *nextIndexPath = [self.photoViewDataSource photoViewController:self getNextIndexPathForCurrentIndexPath:indexPath];
-        if (nextIndexPath) {
-            UIImage *rightImage = [self.photoViewDataSource photoViewController:self getImageForIndexPath:nextIndexPath];
-            self.rightImageView.image = rightImage;
-            self.rightImageView.hidden = NO;
-        }
-        else
-            self.rightImageView.hidden = YES;
+    if ([self.photoViewDataSource respondsToSelector:@selector(numberOfPhotos)]
+        && _centerIndex < [self.photoViewDataSource numberOfPhotos] - 1) {
+        self.rightImageView.image = [self.photoViewDataSource photoViewController:self getImageForIndex:_centerIndex + 1];
+    }
+    else {
+        self.rightImageView.hidden = YES;
     }
 }
 
@@ -217,9 +208,10 @@
                                  self.centerImageView.alpha = 1;
                                  self.rightImageView.alpha = 1;
                                  
-                                 if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getNextIndexPathForCurrentIndexPath:)]) {
-                                     NSIndexPath *nextIndexPath = [self.photoViewDataSource photoViewController:self getNextIndexPathForCurrentIndexPath:_centerIndexPath];
-                                     [self setContentForIndexPath:nextIndexPath];
+                                 // Set right image
+                                 if ([self.photoViewDataSource respondsToSelector:@selector(numberOfPhotos)]
+                                     && _centerIndex < [self.photoViewDataSource numberOfPhotos] - 1) {
+                                     [self setContentForIndex:_centerIndex + 1];
                                  }
                              }];
         }
@@ -239,9 +231,9 @@
                                  self.centerImageView.alpha = 1;
                                  self.rightImageView.alpha = 1;
                                  
-                                 if ([self.photoViewDataSource respondsToSelector:@selector(photoViewController:getPreviousIndexPathForCurrentIndexPath:)]) {
-                                     NSIndexPath *previousIndexPath = [self.photoViewDataSource photoViewController:self getPreviousIndexPathForCurrentIndexPath:_centerIndexPath];
-                                     [self setContentForIndexPath:previousIndexPath];
+                                 // Set left image
+                                 if (_centerIndex > 0) {
+                                     [self setContentForIndex:_centerIndex - 1];
                                  }
                              }];
         }

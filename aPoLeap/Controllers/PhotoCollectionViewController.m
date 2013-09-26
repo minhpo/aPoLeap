@@ -25,6 +25,7 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     PhotoManager *_photoManager;
     
     NSInteger _maxNumberOrRowsPerSection;
+    NSInteger _indexToCurrentPhotoMetaDataInPicturesArray;
 }
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
@@ -200,7 +201,8 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
         
         // Set image content from the current selected cell
         NSIndexPath *currentIndexPath = [self.collectionView indexPathForCell:_currentSelectedCell];
-        [_photoViewController setContentForIndexPath:currentIndexPath];
+        _indexToCurrentPhotoMetaDataInPicturesArray = currentIndexPath.section * _maxNumberOrRowsPerSection + currentIndexPath.row;
+        [_photoViewController setContentForIndex:_indexToCurrentPhotoMetaDataInPicturesArray];
         
         // Remove the old snapshot
         [_snapShot removeFromSuperview];
@@ -307,7 +309,10 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     }
 }
 
-- (void)photoViewController:(PhotoViewController*)photoViewController didScrollToIndexPath:(NSIndexPath*)indexPath {
+- (void)photoViewController:(PhotoViewController*)photoViewController didScrollToIndex:(NSInteger)index {
+    _indexToCurrentPhotoMetaDataInPicturesArray = index;
+    NSIndexPath *indexPath = [self getIndexPathFromIndex:_indexToCurrentPhotoMetaDataInPicturesArray];
+    
     // Show old cell
     _currentSelectedCell.alpha = 1;
     
@@ -323,54 +328,15 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 
 #pragma mark - PhotoViewDataSource
 
-- (NSIndexPath*)photoViewController:(PhotoViewController*)photoViewController getNextIndexPathForCurrentIndexPath:(NSIndexPath*)indexPath {
-    NSInteger row = 0;
-    NSInteger section = 0;
+- (UIImage*)photoViewController:(PhotoViewController*)photoViewController getImageForIndex:(NSInteger)index {
+    PhotoMetaData *photoMetaData = _pictures[index];
+    UIImage *image = [_photoManager getImageUsingPhotoMetaData:photoMetaData];
     
-    // Return nil if current index path reached max boundary
-    if (indexPath.section == [self numberOfSectionsInCollectionView:self.collectionView] - 1
-        && indexPath.row == [self collectionView:self.collectionView numberOfItemsInSection:indexPath.section] - 1)
-        return nil;
-    
-    // If reaching section overflow, then increment section and set row index to 0
-    if (indexPath.row == [self collectionView:self.collectionView numberOfItemsInSection:indexPath.section] - 1)
-        section = indexPath.section + 1;
-    // Increment row index and set section index to current index
-    else if (indexPath.section <= [self numberOfSectionsInCollectionView:self.collectionView] - 1) {
-        row = indexPath.row + 1;
-        section = indexPath.section;
-    }
-    
-    return [NSIndexPath indexPathForRow:row inSection:section];
+    return image;
 }
 
-- (NSIndexPath*)photoViewController:(PhotoViewController*)photoViewController getPreviousIndexPathForCurrentIndexPath:(NSIndexPath*)indexPath {
-    NSInteger row = 0;
-    NSInteger section = 0;
-    
-    // Return nil if current index path reached max boundary
-    if (indexPath.section == 0
-        && indexPath.row == 0)
-        return nil;
-    
-    // If reaching section overflow, then decrease section and set row index to max row index
-    if (indexPath.row == 0) {
-        section = indexPath.section - 1;
-        row = [self collectionView:self.collectionView numberOfItemsInSection:section] - 1;
-    }
-    // Decrease row index and set section index to current index
-    else if (indexPath.section >= 0) {
-        section = indexPath.section;
-        row = indexPath.row - 1;
-    }
-    
-    return [NSIndexPath indexPathForRow:row inSection:section];
-}
-
-- (UIImage*)photoViewController:(PhotoViewController*)photoViewController getImageForIndexPath:(NSIndexPath*)indexPath {
-    PhotoViewCell *cell = (PhotoViewCell*)[self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
-    
-    return [cell image];
+- (NSInteger)numberOfPhotos {
+    return _pictures.count;
 }
 
 #pragma mark - Prive methods
@@ -408,6 +374,14 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
         // Reload collection view
         [self.collectionView reloadData];
     }
+}
+
+- (NSIndexPath*)getIndexPathFromIndex:(NSInteger)index {
+    NSInteger section = index / _maxNumberOrRowsPerSection;
+    NSInteger row = index%_maxNumberOrRowsPerSection;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    
+    return indexPath;
 }
 
 @end

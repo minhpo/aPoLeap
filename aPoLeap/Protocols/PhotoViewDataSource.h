@@ -12,8 +12,7 @@
 
 @protocol PhotoViewDataSource <NSObject>
 
-- (NSIndexPath*)photoViewController:(PhotoViewController*)photoViewController getNextIndexPathForCurrentIndexPath:(NSIndexPath*)indexPath;
-- (NSIndexPath*)photoViewController:(PhotoViewController*)photoViewController getPreviousIndexPathForCurrentIndexPath:(NSIndexPath*)indexPath;
-- (UIImage*)photoViewController:(PhotoViewController*)photoViewController getImageForIndexPath:(NSIndexPath*)indexPath;
+- (UIImage*)photoViewController:(PhotoViewController*)photoViewController getImageForIndex:(NSInteger)index;
+- (NSInteger)numberOfPhotos;
 
 @end
