@@ -8,14 +8,14 @@
 
 #import "PhotoManager.h"
 
-static const NSString* kMockListOfPhotoMetaDataUrlTemplate = @"kMockListOfPhotoMetaDataUrlTemplate%d";
-static const NSString* kMockPhotoUrlTemplate = @"kMockPhotoUrlTemplate";
-
 @class MockRemoteCommunicator;
+@class PhotoMetaData;
 
 @interface MockPhotoManager : PhotoManager
 
 - (void)setMockRemoteCommunicator:(MockRemoteCommunicator*)mockRemoteCommunictor;
+- (NSString*)getUrlForListOfMetaDataForPage:(NSInteger)page;
+- (NSString*)getUrlForPhotoBelongingToPhotoMetaData:(PhotoMetaData*)photoMetaData;
 
 @property (assign) BOOL didNotify;
 

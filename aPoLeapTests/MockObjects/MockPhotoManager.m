@@ -8,26 +8,28 @@
 
 #import "MockPhotoManager.h"
 #import "MockRemoteCommunicator.h"
+#import "PhotoMetaData.h"
 
 @implementation MockPhotoManager
-
-- (id)init {
-    self = [super init];
-    
-    if (self) {
-        _listOfPhotoMetaDataUrlTemplate = kMockListOfPhotoMetaDataUrlTemplate;
-        _photoUrlTemplate = kMockPhotoUrlTemplate;
-        
-        _remoteCommunicator = nil;
-    }
-    
-    return self;
-}
 
 #pragma mark - Public methods
 
 - (void)setMockRemoteCommunicator:(MockRemoteCommunicator*)mockRemoteCommunictor {
     _remoteCommunicator = mockRemoteCommunictor;
+}
+
+- (NSString*)getUrlForListOfMetaDataForPage:(NSInteger)page {
+    return [NSString stringWithFormat:_listOfPhotoMetaDataUrlTemplate, page];
+}
+
+- (NSString*)getUrlForPhotoBelongingToPhotoMetaData:(PhotoMetaData*)photoMetaData {
+    NSString *photoUrl = [NSString stringWithFormat:_photoUrlTemplate,
+                          photoMetaData.farm,
+                          photoMetaData.server,
+                          photoMetaData.photoId,
+                          photoMetaData.secret];
+    
+    return photoUrl;
 }
 
 #pragma mark - RemoteCommunicatorDelegate

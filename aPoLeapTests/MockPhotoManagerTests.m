@@ -11,11 +11,13 @@
 #import "TMCStorageManager.h"
 #import "MockPhotoManager.h"
 #import "MockRemoteCommunicator.h"
+#import "PhotoMetaData.h"
 
 #import "NSString+Encryption.h"
 
 @interface MockPhotoManagerTests : XCTestCase {
     MockPhotoManager *_photoManager;
+    PhotoMetaData *_testPhotoMetaData;
 }
 
 @end
@@ -27,11 +29,17 @@
     [super setUp];
     
     _photoManager = [[MockPhotoManager alloc] init];
+    
+    // Setup mock photo metadata
+    NSString *jsonString = @"{\"id\":\"9954718275\", \"owner\":\"102836693@N04\", \"secret\":\"d0272c327e\", \"server\":\"7358\", \"farm\":8, \"title\":\"Starbucks grand opening with Nicolas students.\", \"ispublic\":1, \"isfriend\":0, \"isfamily\":0}";
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+    _testPhotoMetaData = [[PhotoMetaData alloc] initWithDictionary:jsonDictionary];
 }
 
 - (void)tearDown
 {
-    [TMCStorageManager removeContentForKey:[[NSString stringWithFormat:kMockListOfPhotoMetaDataUrlTemplate, 1] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
+    [TMCStorageManager removeContentForKey:[[NSString stringWithFormat:kListOfPhotoMetaDataUrlTemplate, 1] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
+    [TMCStorageManager removeContentForKey:[[_photoManager getUrlForPhotoBelongingToPhotoMetaData:_testPhotoMetaData] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
 
     [super tearDown];
 }
@@ -45,7 +53,7 @@
 - (void)testGetEmptyListOfPhotoMetaDataForFirstPage {
     // Setup mock data
     NSArray *emptyArray = [NSArray array];
-    [TMCStorageManager saveContent:emptyArray forKey:[[NSString stringWithFormat:kMockListOfPhotoMetaDataUrlTemplate, 1] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
+    [TMCStorageManager saveContent:emptyArray forKey:[[NSString stringWithFormat:kListOfPhotoMetaDataUrlTemplate, 1] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
     
     // Get content for list of photos
     NSArray *content = [_photoManager getListOfPhotoMetaDataForPage:1];
@@ -57,7 +65,7 @@
 - (void)testGetFilledListOfPhotoMetaData {
     // Setup mock data
     NSArray *filledArray = @[@"1", @"2", @"3"];
-    [TMCStorageManager saveContent:filledArray forKey:[[NSString stringWithFormat:kMockListOfPhotoMetaDataUrlTemplate, 1] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
+    [TMCStorageManager saveContent:filledArray forKey:[[NSString stringWithFormat:kListOfPhotoMetaDataUrlTemplate, 1] getHashWithEncryption:kEncryptionType_Md5 withKey:nil]];
     
     // Get content for list of photos
     NSArray *content = [_photoManager getListOfPhotoMetaDataForPage:1];
@@ -97,6 +105,22 @@
     XCTAssertTrue([content isKindOfClass:[NSArray class]], @"Expected an array class");
 }
 
-//TODO: Add tests for retrieving images
+- (void)testGetNilImage {
+    UIImage *content = [_photoManager getImageUsingPhotoMetaData:_testPhotoMetaData];
+    
+    XCTAssertNil(content, @"Expected a nil object when image for the test photo metadata is not available");
+}
+
+- (void)testNotifyOnEndRetrievingPhoto {
+    // Setup mock communictor
+    MockRemoteCommunicator *mockRemoteCommunicator = [[MockRemoteCommunicator alloc] init];
+    mockRemoteCommunicator.remoteCommunicatorDelegate = _photoManager;
+    [_photoManager setMockRemoteCommunicator:mockRemoteCommunicator];
+    
+    NSString *notificationName;
+    [_photoManager retrievePhotoUsingPhotoMetaData:_testPhotoMetaData forNotificationName:&notificationName];
+    
+    XCTAssertTrue(_photoManager.didNotify, @"Expected a notification when finished retrieving the list of photo metadata");
+}
 
 @end
