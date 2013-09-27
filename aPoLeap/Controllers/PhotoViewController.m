@@ -52,6 +52,13 @@
     [self.view addGestureRecognizer:_oneFingerPanGestureRecognizer];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    self.leftImageView.center = CGPointMake(self.view.center.x - self.view.frame.size.width, self.view.center.y);
+    self.rightImageView.center = CGPointMake(self.view.center.x + self.view.frame.size.width, self.view.center.y);
+}
+
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     

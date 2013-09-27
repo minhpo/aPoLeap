@@ -30,6 +30,8 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) IBOutlet UICollectionViewFlowLayout *flowLayout;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicatorView;
+
 @end
 
 @implementation PhotoCollectionViewController
@@ -63,7 +65,13 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayPhotoMetaData:) name:notificationName object:_photoManager];
         
         _pictures = [NSArray array];
+        
+        // Start the loading animation
+        [self.activityIndicatorView startAnimating];
     }
+    else
+        // Stop the loading animation
+        [self.activityIndicatorView stopAnimating];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -79,13 +87,8 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     
+    // Reload the data as the number of columns changed on orientation change
     [self.collectionView reloadData];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)dealloc {
@@ -210,7 +213,11 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
         // Animate the new screen to full screen size
         [UIView animateWithDuration:0.3
                          animations:^(){
-                             _photoViewController.view.frame = self.view.frame;
+                             UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+                             if (UIInterfaceOrientationIsPortrait(orientation))
+                                 _photoViewController.view.frame = self.view.frame;
+                             else
+                                 _photoViewController.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.height, self.view.frame.size.width);
                          }
                          completion:^(BOOL finished){
                              self.collectionView.scrollEnabled = YES;
@@ -358,6 +365,7 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     return aspectFillRect;
 }
 
+// Display content for the collection view when data is received
 - (void)displayPhotoMetaData:(NSNotification*)notification {
     // Stop listening for notification
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -374,8 +382,12 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
         // Reload collection view
         [self.collectionView reloadData];
     }
+    
+    // Stop the loading animation
+    [self.activityIndicatorView stopAnimating];
 }
 
+// Get an indexPath for the collection view from an index that points to an array
 - (NSIndexPath*)getIndexPathFromIndex:(NSInteger)index {
     NSInteger section = index / _maxNumberOrRowsPerSection;
     NSInteger row = index%_maxNumberOrRowsPerSection;
