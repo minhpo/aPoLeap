@@ -22,6 +22,11 @@
 		22261D7617F23D74004675ED /* TMCStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 22261D7417F23D74004675ED /* TMCStorageManager.m */; };
 		22261D7A17F23E07004675ED /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 22261D7917F23E07004675ED /* NSString+Encryption.m */; };
 		22261D7B17F23E07004675ED /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 22261D7917F23E07004675ED /* NSString+Encryption.m */; };
+		2256365817F553E800D39996 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2256365617F553E800D39996 /* Localizable.strings */; };
+		2256365917F553E800D39996 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2256365617F553E800D39996 /* Localizable.strings */; };
+		2256365B17F5547800D39996 /* aPoLeap-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 226F02FF17F0D52400DD7194 /* aPoLeap-Info.plist */; };
+		2256365C17F5547800D39996 /* aPoLeap-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 226F02FF17F0D52400DD7194 /* aPoLeap-Info.plist */; };
+		2256365E17F5548600D39996 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 226F030317F0D52400DD7194 /* main.m */; };
 		226F02F817F0D52400DD7194 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 226F02F717F0D52400DD7194 /* Foundation.framework */; };
 		226F02FA17F0D52400DD7194 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 226F02F917F0D52400DD7194 /* CoreGraphics.framework */; };
 		226F02FC17F0D52400DD7194 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 226F02FB17F0D52400DD7194 /* UIKit.framework */; };
@@ -79,13 +84,16 @@
 		22261D7417F23D74004675ED /* TMCStorageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TMCStorageManager.m; path = Controllers/TMCStorageManager.m; sourceTree = "<group>"; };
 		22261D7817F23E07004675ED /* NSString+Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Encryption.h"; path = "Categories/NSString+Encryption.h"; sourceTree = "<group>"; };
 		22261D7917F23E07004675ED /* NSString+Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Encryption.m"; path = "Categories/NSString+Encryption.m"; sourceTree = "<group>"; };
+		2256365717F553E800D39996 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2256365A17F5547800D39996 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2256365D17F5548600D39996 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		226F02F417F0D52400DD7194 /* aPoLeap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aPoLeap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		226F02F717F0D52400DD7194 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		226F02F917F0D52400DD7194 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		226F02FB17F0D52400DD7194 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		226F02FF17F0D52400DD7194 /* aPoLeap-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "aPoLeap-Info.plist"; sourceTree = "<group>"; };
+		226F02FF17F0D52400DD7194 /* aPoLeap-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "aPoLeap-Info.plist"; sourceTree = "<group>"; };
 		226F030117F0D52400DD7194 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		226F030317F0D52400DD7194 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		226F030317F0D52400DD7194 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		226F030517F0D52400DD7194 /* aPoLeap-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aPoLeap-Prefix.pch"; sourceTree = "<group>"; };
 		226F030617F0D52400DD7194 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		226F030717F0D52400DD7194 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -217,6 +225,7 @@
 				226F030017F0D52400DD7194 /* InfoPlist.strings */,
 				226F030317F0D52400DD7194 /* main.m */,
 				226F030517F0D52400DD7194 /* aPoLeap-Prefix.pch */,
+				2256365617F553E800D39996 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -384,6 +393,7 @@
 			knownRegions = (
 				en,
 				Base,
+				nl,
 			);
 			mainGroup = 226F02EB17F0D52400DD7194;
 			productRefGroup = 226F02F517F0D52400DD7194 /* Products */;
@@ -404,8 +414,10 @@
 				22A014EF17F163B8008BE2BD /* 03.jpg in Resources */,
 				226F031017F0D52400DD7194 /* Images.xcassets in Resources */,
 				226F032E17F0D6C700DD7194 /* PhotoCollectionView.xib in Resources */,
+				2256365B17F5547800D39996 /* aPoLeap-Info.plist in Resources */,
 				22A014ED17F163B8008BE2BD /* 01.jpg in Resources */,
 				22A014EE17F163B8008BE2BD /* 02.jpg in Resources */,
+				2256365817F553E800D39996 /* Localizable.strings in Resources */,
 				226F033F17F0DA7000DD7194 /* PhotoViewCell.xib in Resources */,
 				226F030217F0D52400DD7194 /* InfoPlist.strings in Resources */,
 				228264BA17F1055100A8B629 /* PhotoView.xib in Resources */,
@@ -417,10 +429,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2256365917F553E800D39996 /* Localizable.strings in Resources */,
 				226F032117F0D52500DD7194 /* InfoPlist.strings in Resources */,
 				228264BB17F1055100A8B629 /* PhotoView.xib in Resources */,
 				226F033417F0D6ED00DD7194 /* PhotoCollectionView.xib in Resources */,
 				226F034017F0DA7000DD7194 /* PhotoViewCell.xib in Resources */,
+				2256365C17F5547800D39996 /* aPoLeap-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +505,7 @@
 				22DF1BE017F1F70A0002F2F0 /* MockPhotoCollectionViewController.m in Sources */,
 				22249E3517F36B9F0076ACB2 /* PhotoMetaDataFactory.m in Sources */,
 				22261D7617F23D74004675ED /* TMCStorageManager.m in Sources */,
+				2256365E17F5548600D39996 /* main.m in Sources */,
 				220D23EF17F24003001FD5AB /* PhotoManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -506,10 +521,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		2256365617F553E800D39996 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2256365717F553E800D39996 /* en */,
+				2256365A17F5547800D39996 /* nl */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		226F030017F0D52400DD7194 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				226F030117F0D52400DD7194 /* en */,
+				2256365D17F5548600D39996 /* nl */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

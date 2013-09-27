@@ -6,7 +6,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PhotoCollectionViewController">
             <connections>
-                <outlet property="activityIndicatorView" destination="pUH-Jk-aAr" id="TGN-NM-9Kh"/>
                 <outlet property="collectionView" destination="n2J-t7-nMA" id="VR4-Mw-jjn"/>
                 <outlet property="flowLayout" destination="jcc-4W-dFd" id="XBf-iN-4GJ"/>
                 <outlet property="view" destination="1" id="Lhm-nS-wQV"/>
@@ -39,10 +38,6 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
-                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="pUH-Jk-aAr">
-                    <rect key="frame" x="150" y="230" width="20" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

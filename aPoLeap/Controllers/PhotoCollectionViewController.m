@@ -21,16 +21,20 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     UIView *_snapShot;
     
     BOOL _didEndPinch;
+    BOOL _didLoadBefore;
     
     PhotoManager *_photoManager;
     
     NSInteger _maxNumberOrRowsPerSection;
     NSInteger _indexToCurrentPhotoMetaDataInPicturesArray;
+    
+    UIRefreshControl *_refreshControl;
+    
+    NSString *_notificationName;
 }
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) IBOutlet UICollectionViewFlowLayout *flowLayout;
-@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicatorView;
 
 @end
 
@@ -39,6 +43,12 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Set a refresh control for display during load of photo metadata
+    _refreshControl = [[UIRefreshControl alloc] init];
+    _refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"_refreshingPhotos", @"")];
+    [_refreshControl addTarget:self action:@selector(retrievePhotoMetaData) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:_refreshControl];
     
     // Register xib for collection view
     [self.collectionView registerNib:[UINib nibWithNibName:@"PhotoViewCell" bundle:nil] forCellWithReuseIdentifier:photoViewCellIdentifier];
@@ -52,26 +62,8 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     // Get shared instance of PhotoManager object
     _photoManager = [(AppDelegate*)[UIApplication sharedApplication].delegate getSharedPhotoManager];
     
-    // Attempt to retrieve content for first page
-    _pictures = [_photoManager getListOfPhotoMetaDataForPage:1];
-    
-    // If no content is available locally, then retrieve it from the web
-    if (!_pictures) {
-        NSString *notificationName;
-        [_photoManager retrieveListOfPhotoMetaDataForPage:1 forNotificationName:&notificationName];
-        
-        // Listen to end retrieval notification
-        if (notificationName)
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayPhotoMetaData:) name:notificationName object:_photoManager];
-        
-        _pictures = [NSArray array];
-        
-        // Start the loading animation
-        [self.activityIndicatorView startAnimating];
-    }
-    else
-        // Stop the loading animation
-        [self.activityIndicatorView stopAnimating];
+    // Check for content when application becomes active
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkForPhotoMetaDataContent) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -368,7 +360,7 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
 // Display content for the collection view when data is received
 - (void)displayPhotoMetaData:(NSNotification*)notification {
     // Stop listening for notification
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:_notificationName object:nil];
     
     // Check if notifier was from shared instance of PhotoManager
     if (notification.object == _photoManager) {
@@ -383,8 +375,11 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
         [self.collectionView reloadData];
     }
     
+    // Enable user interaction with collection view
+    self.collectionView.userInteractionEnabled = YES;
+    
     // Stop the loading animation
-    [self.activityIndicatorView stopAnimating];
+    [_refreshControl endRefreshing];
 }
 
 // Get an indexPath for the collection view from an index that points to an array
@@ -394,6 +389,42 @@ static const NSString *photoViewCellIdentifier = @"photoViewCellIdentifier";
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
     
     return indexPath;
+}
+
+// Retrieve data from remote
+- (void)retrievePhotoMetaData {
+    NSString *localNotificationName;
+    [_photoManager retrieveListOfPhotoMetaDataForPage:1 forNotificationName:&localNotificationName];
+    
+    // Listen to end retrieval notification
+    if (localNotificationName) {
+        _notificationName = localNotificationName;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayPhotoMetaData:) name:_notificationName object:_photoManager];
+    }
+    
+    // Disable user interaction with collection view
+    self.collectionView.userInteractionEnabled = NO;
+}
+
+- (void)checkForPhotoMetaDataContent {
+    // Attempt to retrieve content for first page
+    _pictures = [_photoManager getListOfPhotoMetaDataForPage:1];
+    
+    // If no content is available locally, then retrieve it from the web
+    if (!_pictures) {
+        [self retrievePhotoMetaData];
+        
+        _pictures = [NSArray array];
+        
+        // Start the loading animation
+        [_refreshControl beginRefreshing];
+    }
+    
+    // If data was never loaded before, then load them for display
+    if (!_didLoadBefore) {
+        _didLoadBefore = YES;
+        [self.collectionView reloadData];
+    }
 }
 
 @end
